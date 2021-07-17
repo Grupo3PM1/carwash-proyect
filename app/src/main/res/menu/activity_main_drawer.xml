@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+   <!--<group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_cotizacion"
+            android:icon="@drawable/outline_description_24"
+            android:title="Solicitar Cotizacion" />
+        <item
+            android:id="@+id/nav_configuracion"
+            android:icon="@drawable/outline_settings_24"
+            android:title="Configuracion de Perfil" />
+        <item
+            android:id="@+id/nav_historial"
+            android:icon="@drawable/outline_schedule_24"
+            android:title="Historial de Servicios"/>
+
+    </group>-->
+
+
+    <item
+        android:title="Acciones"
+        android:icon="@drawable/fondop">
+        <menu>
+            <item
+                android:id="@+id/nav_cotizacion"
+                android:icon="@drawable/outline_description_24"
+                android:title="Solicitar Cotizacion" />
+        </menu>
+    </item>
+
+
+    <item
+        android:title="Configuracion de Perfil"
+        android:icon="@drawable/fondop">
+        <menu>
+            <item
+                android:id="@+id/nav_cliente"
+                android:icon="@drawable/outline_manage_accounts_24"
+                android:title="Mi Perfil" />
+
+            <item
+                android:id="@+id/nav_vehiculo"
+                android:icon="@drawable/outline_directions_car_24"
+                android:title="Perfil Vehiculo" />
+        </menu>
+    </item>
+
+    <item
+        android:title="Historial de Servicios Realizados"
+        android:icon="@drawable/fondop">
+        <menu>
+            <item
+                android:id="@+id/nav_c_aceite"
+                android:icon="@drawable/outline_water_drop_24"
+                android:title="Cambios de Aceite" />
+
+            <item
+                android:id="@+id/nav_lavados"
+                android:icon="@drawable/outline_local_car_wash_24"
+                android:title="Lavados" />
+        </menu>
+    </item>
+
+    <item android:title=""
+        android:icon="@drawable/fondop">
+        <menu>
+            <item
+                android:id="@+id/nav_"
+                android:icon="@drawable/outline_logout_24"
+                android:title="Cerrar Sesion" />
+        </menu>
+    </item>
+
+
+</menu>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_principal">
+
+    <fragment
+        android:id="@+id/nav_principal"
+        android:name="com.aplicacion.elcatrachocarwash.ui.principal.PrincipalFragment"
+        android:label="CarWash 'El Catracho' "
+        tools:layout="@layout/fragment_principal" />
+
+    <fragment
+        android:id="@+id/nav_cotizacion"
+        android:name="com.aplicacion.elcatrachocarwash.ui.cotizacion.CotizacionFragment"
+        android:label="Solicitar Cotizacion"
+        tools:layout="@layout/fragment_cotizacion" />
+
+    <fragment
+        android:id="@+id/nav_c_aceite"
+        android:name="com.aplicacion.elcatrachocarwash.ui.historial.CambiosAceiteFragment"
+        android:label="Cambios De Aceite"
+        tools:layout="@layout/fragment_cambios_aceite" />
+
+    <fragment
+        android:id="@+id/nav_lavados"
+        android:name="com.aplicacion.elcatrachocarwash.ui.historial.LavadosFragment"
+        android:label="Lavados Realizados"
+        tools:layout="@layout/fragment_lavados" />
+
+    <fragment
+        android:id="@+id/nav_cliente"
+        android:name="com.aplicacion.elcatrachocarwash.ui.configuracionPerfil.PerfilUsuarioFragment"
+        android:label="Mi Perfil"
+        tools:layout="@layout/fragment_perfil_usuario" />
+
+    <fragment
+        android:id="@+id/nav_vehiculo"
+        android:name="com.aplicacion.elcatrachocarwash.ui.configuracionPerfil.PerfilVehiculoFragment"
+        android:label="Perfil Vehiculo"
+        tools:layout="@layout/fragment_perfil_vehiculo" />
+
+</navigation>

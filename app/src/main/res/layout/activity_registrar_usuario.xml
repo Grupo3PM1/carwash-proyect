@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondop"
+    tools:context=".RegistrarUsuario">
+
+    <Button
+        android:id="@+id/btnregistrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
+        android:backgroundTint="@color/teal_700"
+        android:text="REGISTRAR"
+        android:textColor="@color/ic_launcher_background"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.808"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sppais"
+        app:layout_constraintVertical_bias="0.563" />
+
+    <TextView
+        android:id="@+id/txtnombre"
+        android:layout_width="325dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="220dp"
+        android:hint="Nombre"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etnombre"
+        android:layout_width="326dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtnombre" />
+
+    <TextView
+        android:id="@+id/txtapellido"
+        android:layout_width="325dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="32dp"
+        android:hint="Apellido"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etnombre" />
+
+    <EditText
+        android:id="@+id/etapellido"
+        android:layout_width="326dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtapellido" />
+
+    <TextView
+        android:id="@+id/txtpais"
+        android:layout_width="325dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="36dp"
+        android:hint="Seleccione un pais"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.523"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etapellido" />
+
+    <Spinner
+        android:id="@+id/sppais"
+        style="@android:style/Widget.Holo.Spinner"
+        android:layout_width="325dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtpais" />
+
+    <ImageView
+        android:id="@+id/fotoperfil"
+        android:layout_width="166dp"
+        android:layout_height="113dp"
+        android:src="@drawable/outline_account_circle_24"
+        app:layout_constraintBottom_toTopOf="@+id/txtnombre"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

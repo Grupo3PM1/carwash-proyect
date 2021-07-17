@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondop"
+    tools:context=".ui.configuracionPerfil.PerfilVehiculoFragment">
+
+    <Button
+        android:id="@+id/btnConfigurar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
+        android:backgroundTint="@color/teal_700"
+        android:text="GUARDAR"
+        android:textColor="@color/ic_launcher_background"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.808"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sptipoaceite"
+        app:layout_constraintVertical_bias="0.563" />
+
+
+    <TextView
+        android:id="@+id/txt1"
+        android:layout_width="325dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="96dp"
+        android:hint="Seleccione un modelo"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spmodelo"
+        style="@android:style/Widget.Holo.Spinner"
+        android:layout_width="325dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt1" />
+
+    <TextView
+        android:id="@+id/txt2"
+        android:layout_width="325dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="32dp"
+        android:hint="Seleccione una marca"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spmodelo" />
+
+    <Spinner
+        android:id="@+id/spmarca"
+        style="@android:style/Widget.Holo.Spinner"
+        android:layout_width="325dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt2" />
+
+    <TextView
+        android:id="@+id/txt3"
+        android:layout_width="325dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="28dp"
+        android:hint="Ingrese el año de fabricacion"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spmarca" />
+
+    <EditText
+        android:id="@+id/eTanio"
+        android:layout_width="326dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt3" />
+
+    <TextView
+        android:id="@+id/txt4"
+        android:layout_width="325dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="36dp"
+        android:hint="Seleccione el tipo de aceite"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eTanio" />
+
+    <Spinner
+        android:id="@+id/sptipoaceite"
+        style="@android:style/Widget.Holo.Spinner"
+        android:layout_width="325dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt4" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
