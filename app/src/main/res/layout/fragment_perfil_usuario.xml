@@ -4,106 +4,145 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondop"
-    tools:context=".ui.configuracionPerfil.PerfilUsuarioFragment">
+    android:background="@drawable/pantall_login"
+    tools:context=".ui.configuracionPerfil.PerfilUsuarioFragment"
+    android:id="@+id/container">
 
-    <Button
-        android:id="@+id/btnguardar"
-        android:layout_width="wrap_content"
+
+    <EditText
+        android:id="@+id/ttnombre"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="52dp"
-        android:backgroundTint="@color/teal_700"
-        android:text="GUARDAR"
-        android:textColor="@color/ic_launcher_background"
-        app:cornerRadius="20dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="472dp"
+        android:backgroundTint="@color/botones"
+        android:ems="10"
+        android:fontFamily="sans-serif-light"
+        android:hint="Nombre"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FDFDFD"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.808"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sppais"
-        app:layout_constraintVertical_bias="0.563" />
-
-    <TextView
-        android:id="@+id/txtnombre"
-        android:layout_width="325dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="220dp"
-        android:hint="Nombre"
-        android:textAlignment="textStart"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/etnombre"
-        android:layout_width="326dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/ttapellido"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="408dp"
+        android:backgroundTint="@color/botones"
         android:ems="10"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtnombre" />
-
-    <TextView
-        android:id="@+id/txtapellido"
-        android:layout_width="325dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif-light"
         android:hint="Apellido"
-        android:textAlignment="textStart"
-        android:textSize="20sp"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etnombre" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/etapellido"
-        android:layout_width="326dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/ttpais"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="340dp"
+        android:backgroundTint="@color/botones"
         android:ems="10"
-        android:inputType="number"
+        android:fontFamily="sans-serif-light"
+        android:hint="Pais"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtapellido" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/txtpais"
-        android:layout_width="325dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="36dp"
-        android:hint="Seleccione un pais"
-        android:textAlignment="textStart"
-        android:textSize="20sp"
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="500dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/button_rounded"
+        android:text="ACTUALIZAR"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.523"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etapellido" />
-
-    <Spinner
-        android:id="@+id/sppais"
-        style="@android:style/Widget.Holo.Spinner"
-        android:layout_width="325dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtpais" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
-        android:id="@+id/fotoperfil"
-        android:layout_width="166dp"
-        android:layout_height="113dp"
-        android:src="@drawable/outline_account_circle_24"
-        app:layout_constraintBottom_toTopOf="@+id/txtnombre"
+        android:id="@+id/img"
+        android:layout_width="203dp"
+        android:layout_height="143dp"
+        android:src="@drawable/outline_manage_accounts_24"
+        app:layout_constraintBottom_toTopOf="@+id/ttnombre"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="55dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_rounded_border"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.372"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintVertical_bias="0.465"
+        app:srcCompat="@drawable/salir" />
+
+    <ImageButton
+        android:id="@+id/btn_google"
+        android:layout_width="55dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/button_rounded_border"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.612"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintVertical_bias="0.465"
+        app:srcCompat="@drawable/circule" />
+
+    <EditText
+        android:id="@+id/ttemail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/botones"
+        android:ems="10"
+        android:fontFamily="sans-serif-light"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ttpais" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
