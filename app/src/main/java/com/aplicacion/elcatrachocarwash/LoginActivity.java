@@ -57,6 +57,16 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // Inicializar Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
         btn_google = (ImageButton) findViewById(R.id.btn_google);
         btn_iniciar = (Button)findViewById(R.id.btn_iniciar);
         txtEmail = (EditText)findViewById(R.id.txtEmail);
@@ -64,7 +74,7 @@ public class LoginActivity extends AppCompatActivity{
         tt_sign = (TextView)findViewById(R.id.tt_sign);
         tt_restablecercontra = (TextView)findViewById(R.id.tt_restablecercontra);
 
-        tt_restablecercontra.setOnClickListener(new View.OnClickListener() {
+        /*tt_restablecercontra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuth = FirebaseAuth.getInstance();
@@ -80,26 +90,26 @@ public class LoginActivity extends AppCompatActivity{
                             }
                         });
             }
-        });
+        });*/
 
 
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+              signIn();
             }
         });
 
-        tt_sign.setOnClickListener(new View.OnClickListener() {
+        /*tt_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), RegistrarUsuario.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
 
-        btn_iniciar.setOnClickListener(new View.OnClickListener() {
+       /* btn_iniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String correo = txtEmail.getText().toString();
@@ -131,28 +141,11 @@ public class LoginActivity extends AppCompatActivity{
         awesomenValitation.addValidation(this,R.id.txtEmail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
         awesomenValitation.addValidation(this,R.id.txtPass, ".{6,}",R.string.invalid_password);
 
-
-
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        // Inicializar Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-
-
-
+*/
 
     }
 
-
-
-    private void updateUI(GoogleSignInAccount account) {
-    }
-
-    private void signIn() {
+    private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -196,8 +189,8 @@ public class LoginActivity extends AppCompatActivity{
                             Log.d(TAG, "signInWithCredential:success");
                             //FirebaseUser user = mAuth.getCurrentUser();
                              //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
-                            Intent dashboardActivity = new Intent(LoginActivity.this, ActivityPerfil.class);
-                            startActivity(dashboardActivity);
+                            Intent intent = new Intent(LoginActivity.this, ActivityPerfil.class);
+                            startActivity(intent);
                             LoginActivity.this.finish();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -213,13 +206,13 @@ public class LoginActivity extends AppCompatActivity{
         FirebaseUser user = mAuth.getCurrentUser();
         if(user!=null){ //si no es null el usuario ya esta logueado
             //mover al usuario al dashboard
-            Intent dashboardActivity = new Intent(LoginActivity.this, ActivityPerfil.class);
-            startActivity(dashboardActivity);
+            Intent intent = new Intent(LoginActivity.this, ActivityPerfil.class);
+            startActivity(intent);
         }
         super.onStart();
     }
 
-    private void perfUser(){
+   /* private void perfUser(){
         Intent intent = new Intent(this, ActivityPerfil.class);
         intent.putExtra("email",txtEmail.getText().toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -305,7 +298,7 @@ public class LoginActivity extends AppCompatActivity{
 
         }
 
-    }
+    }*/
 
 
 }

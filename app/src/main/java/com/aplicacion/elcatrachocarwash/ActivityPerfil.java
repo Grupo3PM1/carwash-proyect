@@ -74,8 +74,8 @@ public class ActivityPerfil extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         //Abrir MainActivity con SigIn button
                         if(task.isSuccessful()){
-                            Intent mainActivity = new Intent(getApplicationContext(), LoginActivity.class);
-                            startActivity(mainActivity);
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
                             ActivityPerfil.this.finish();
                         }else{
                             Toast.makeText(getApplicationContext(), "No se pudo cerrar sesión con google",
