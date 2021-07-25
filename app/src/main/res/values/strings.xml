@@ -13,4 +13,8 @@
     <string name="title_activity_maps">Map</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="invalid_mail">Ingrese un correo electronico valido</string>
+    <string name="invalid_password">La contraseña debe ser mayor a 6 digitos</string>
+
 </resources>

@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/pantall_login"
-    tools:context=".ui.configuracionPerfil.PerfilUsuarioFragment"
-    android:id="@+id/container">
+    tools:context=".ui.configuracionPerfil.PerfilUsuarioFragment">
 
 
     <EditText
@@ -67,7 +66,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btn_iniciar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -92,7 +91,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/btn_sesion"
         android:layout_width="55dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -103,7 +102,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.372"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintTop_toBottomOf="@+id/btn_iniciar"
         app:layout_constraintVertical_bias="0.465"
         app:srcCompat="@drawable/salir" />
 
@@ -121,7 +120,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.612"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintTop_toBottomOf="@+id/btn_iniciar"
         app:layout_constraintVertical_bias="0.465"
         app:srcCompat="@drawable/circule" />
 

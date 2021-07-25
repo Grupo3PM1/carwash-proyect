@@ -23,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.ObjectInput;
 
@@ -31,18 +32,26 @@ public class PerfilUsuarioFragment extends Fragment{
      ImageView img;
      EditText ttnombre, ttapellido, ttpais,ttemail;
     private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInOptions gso;
+    private FirebaseAuth mAuth;
+    ImageButton btn_sesion;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_perfil_usuario, container, false);
-
-
         ttnombre = (EditText)view.findViewById(R.id.ttnombre);
         ttapellido = (EditText)view.findViewById(R.id.ttapellido);
         ttpais = (EditText)view.findViewById(R.id.ttpais);
         ttemail = (EditText)view.findViewById(R.id.ttemail);
         img = (ImageView) view.findViewById(R.id.img);
+
+
+
+
+
         return view;
 
 
