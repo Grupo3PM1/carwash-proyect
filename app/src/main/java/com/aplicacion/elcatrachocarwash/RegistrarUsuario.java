@@ -3,11 +3,13 @@ package com.aplicacion.elcatrachocarwash;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -26,6 +28,7 @@ public class RegistrarUsuario extends AppCompatActivity {
     Button btn_registrar;
     private FirebaseAuth mAuth;
     AwesomeValidation awesomenValitation;
+    TextView tt_sign2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +45,16 @@ public class RegistrarUsuario extends AppCompatActivity {
         tt_apellido = (EditText) findViewById(R.id.tt_apellido);
         tt_email = (EditText) findViewById(R.id.tt_email);
         tt_contra = (EditText) findViewById(R.id.tt_contra);
-        tt_pais = (EditText) findViewById(R.id.tt_pais);
         btn_registrar = (Button)findViewById(R.id.btn_iniciar);
+        tt_sign2 = (TextView)findViewById(R.id.tt_sign2);
+
+        tt_sign2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btn_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
