@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity{
     AwesomeValidation awesomenValitation;
     ImageButton btn_google;
     Button btn_iniciar;
-    TextView tt_sign;
+    TextView tt_sign, tt_restablecercontra;
     EditText txtEmail, txtPass;
 
 
@@ -62,6 +62,25 @@ public class LoginActivity extends AppCompatActivity{
         txtEmail = (EditText)findViewById(R.id.txtEmail);
         txtPass = (EditText)findViewById(R.id.txtPass);
         tt_sign = (TextView)findViewById(R.id.tt_sign);
+        tt_restablecercontra = (TextView)findViewById(R.id.tt_restablecercontra);
+
+        tt_restablecercontra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth = FirebaseAuth.getInstance();
+                String emailAddress = "user@example.com";
+
+                mAuth.sendPasswordResetEmail(emailAddress)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "Email sent.");
+                                }
+                            }
+                        });
+            }
+        });
 
 
         btn_google.setOnClickListener(new View.OnClickListener() {
@@ -287,5 +306,6 @@ public class LoginActivity extends AppCompatActivity{
         }
 
     }
+
 
 }
