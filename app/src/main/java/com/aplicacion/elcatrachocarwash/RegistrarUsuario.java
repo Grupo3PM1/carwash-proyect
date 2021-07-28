@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aplicacion.elcatrachocarwash.ui.configuracionPerfil.PerfilUsuarioFragment;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 
 import org.jetbrains.annotations.NotNull;
+
 
 public class RegistrarUsuario extends AppCompatActivity {
 
@@ -34,19 +36,16 @@ public class RegistrarUsuario extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar_usuario);
-
         mAuth = FirebaseAuth.getInstance();
         awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomenValitation.addValidation(this,R.id.tt_email, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
         awesomenValitation.addValidation(this,R.id.tt_contra, ".{6,}",R.string.invalid_password);
 
 
-        tt_nombre = (EditText) findViewById(R.id.tt_nombre);
-        tt_apellido = (EditText) findViewById(R.id.tt_apellido);
         tt_email = (EditText) findViewById(R.id.tt_email);
         tt_contra = (EditText) findViewById(R.id.tt_contra);
-        btn_registrar = (Button)findViewById(R.id.btn_iniciar);
-        tt_sign2 = (TextView)findViewById(R.id.tt_sign2);
+        btn_registrar = (Button) findViewById(R.id.btn_iniciar);
+        tt_sign2 = (TextView) findViewById(R.id.tt_sign2);
 
         tt_sign2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +67,13 @@ public class RegistrarUsuario extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(RegistrarUsuario.this,"TU CUENTA HA SIDO CREADA",Toast.LENGTH_SHORT).show();
-                                finish();
+                                Toast.makeText(RegistrarUsuario.this, "CUENTA CREADA CON EXITO", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegistrarUsuario.this, PerfilUsuarioFragment.class);
+                                intent.putExtra("Nombre",tt_nombre.getText().toString());
+                                intent.putExtra("Apellido",tt_apellido.getText().toString());
+                                intent.putExtra("Pais",tt_pais.getText().toString());
+                                intent.putExtra("Correo",tt_email.getText().toString());
+                                startActivity(intent);
                             }else{
                                 String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
                                 dameToastdeerror(errorCode);
@@ -83,6 +87,7 @@ public class RegistrarUsuario extends AppCompatActivity {
 
             }
         });
+
     }
 
     private void dameToastdeerror(String error) {
@@ -163,6 +168,7 @@ public class RegistrarUsuario extends AppCompatActivity {
                 break;
 
         }
+
 
     }
 

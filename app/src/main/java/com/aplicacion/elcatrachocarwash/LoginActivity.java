@@ -1,8 +1,6 @@
 package com.aplicacion.elcatrachocarwash;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -10,15 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-import com.aplicacion.elcatrachocarwash.ui.configuracionPerfil.PerfilUsuarioFragment;
+
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -39,16 +35,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class LoginActivity extends AppCompatActivity{
 
-    private static final int RC_SIGN_IN = 1;
-    private static final String TAG = "GoogleSignIn";
+    int RC_SIGN_IN = 111;
+    String TAG = "GoogleSignIn";
     private GoogleSignInClient mGoogleSignInClient;
-    private GoogleSignInOptions gso;
     private FirebaseAuth mAuth;
-    AwesomeValidation awesomenValitation;
     ImageButton btn_google;
-    Button btn_iniciar;
     TextView tt_sign, tt_restablecercontra;
     EditText txtEmail, txtPass;
+    AwesomeValidation awesomenValitation;
+    Button btn_iniciar;
 
 
 
@@ -58,14 +53,23 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        mAuth = FirebaseAuth.getInstance();
+        awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
+        awesomenValitation.addValidation(this,R.id.txtEmail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
+        awesomenValitation.addValidation(this,R.id.txtPass, ".{6,}",R.string.invalid_password);
+
+        // Configurar Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
+        // Crear un GoogleSignInClient con las opciones especificadas por gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+
 
         btn_google = (ImageButton) findViewById(R.id.btn_google);
         btn_iniciar = (Button)findViewById(R.id.btn_iniciar);
@@ -74,24 +78,13 @@ public class LoginActivity extends AppCompatActivity{
         tt_sign = (TextView)findViewById(R.id.tt_sign);
         tt_restablecercontra = (TextView)findViewById(R.id.tt_restablecercontra);
 
-        /*tt_restablecercontra.setOnClickListener(new View.OnClickListener() {
+        tt_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth = FirebaseAuth.getInstance();
-                String emailAddress = "user@example.com";
-
-                mAuth.sendPasswordResetEmail(emailAddress)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d(TAG, "Email sent.");
-                                }
-                            }
-                        });
+                Intent intent = new Intent(LoginActivity.this, RegistrarUsuario.class);
+                startActivity(intent);
             }
-        });*/
-
+        });
 
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,27 +93,21 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-        /*tt_sign.setOnClickListener(new View.OnClickListener() {
+
+        btn_iniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RegistrarUsuario.class);
-                startActivity(intent);
-            }
-        });*/
-
-
-       /* btn_iniciar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String correo = txtEmail.getText().toString();
-                String contra = txtPass.getText().toString();
-
                 if(awesomenValitation.validate()){
-                    mAuth.createUserWithEmailAndPassword(correo,contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    String email = txtEmail.getText().toString();
+                    String pass = txtPass.getText().toString();
+
+                    mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+
                             if(task.isSuccessful()){
-                                perfUser();
+                                login();
+
                             }else{
                                 String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
                                 dameToastdeerror(errorCode);
@@ -128,93 +115,15 @@ public class LoginActivity extends AppCompatActivity{
 
                         }
                     });
-                }else{
-                    Toast.makeText(LoginActivity.this, "INGRESE LOS DATOS", Toast.LENGTH_SHORT).show();
+
                 }
-
-
             }
         });
 
-        mAuth = FirebaseAuth.getInstance();
-        awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomenValitation.addValidation(this,R.id.txtEmail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
-        awesomenValitation.addValidation(this,R.id.txtPass, ".{6,}",R.string.invalid_password);
-
-*/
-
     }
 
-    private void signIn(){
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //Resultado devuelto al iniciar el Intent de GoogleSignInApi.getSignInIntent (...);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            if (task.isSuccessful()) {
-                try {
-                    // Google Sign In was successful, authenticate with Firebase
-                    GoogleSignInAccount account = task.getResult(ApiException.class);
-                    Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                    firebaseAuthWithGoogle(account.getIdToken());
-                } catch (ApiException e) {
-                    // Google Sign In fallido, actualizar GUI
-                    Log.w(TAG, "Google sign in failed", e);
-                }
-            } else {
-                Log.d(TAG, "Error, login no exitoso:" + task.getException().toString());
-                Toast.makeText(this, "Ocurrio un error. " + task.getException().toString(),
-                        Toast.LENGTH_LONG).show();
-            }
-
-        }
-
-    }
-
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                             //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
-                            Intent intent = new Intent(LoginActivity.this, ActivityPerfil.class);
-                            startActivity(intent);
-                            LoginActivity.this.finish();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-
-                        }
-                    }
-                });
-    }
-
-    @Override
-    protected void onStart() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if(user!=null){ //si no es null el usuario ya esta logueado
-            //mover al usuario al dashboard
-            Intent intent = new Intent(LoginActivity.this, ActivityPerfil.class);
-            startActivity(intent);
-        }
-        super.onStart();
-    }
-
-   /* private void perfUser(){
-        Intent intent = new Intent(this, ActivityPerfil.class);
-        intent.putExtra("email",txtEmail.getText().toString());
+    private void login() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
@@ -238,7 +147,7 @@ public class LoginActivity extends AppCompatActivity{
             case "ERROR_INVALID_EMAIL":
                 Toast.makeText(LoginActivity.this, "La dirección de correo electrónico está mal formateada.", Toast.LENGTH_LONG).show();
                 txtEmail.setError("La dirección de correo electrónico está mal formateada.");
-                txtEmail.requestFocus();
+                txtPass.requestFocus();
                 break;
 
             case "ERROR_WRONG_PASSWORD":
@@ -298,7 +207,75 @@ public class LoginActivity extends AppCompatActivity{
 
         }
 
-    }*/
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Resultado devuelto al iniciar el Intent de GoogleSignInApi.getSignInIntent (...);
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            if (task.isSuccessful()) {
+                try {
+                    // Google Sign In was successful, authenticate with Firebase
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+                    firebaseAuthWithGoogle(account.getIdToken());
+                } catch (ApiException e) {
+                    // Google Sign In fallido, actualizar GUI
+                    Log.w(TAG, "Google sign in failed", e);
+                }
+            } else {
+                Log.d(TAG, "Error, login no exitoso:" + task.getException().toString());
+                Toast.makeText(this, "Ocurrio un error. " + task.getException().toString(),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            //FirebaseUser user = mAuth.getCurrentUser();
+                                //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
+                            Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(dashboardActivity);
+                            LoginActivity.this.finish();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+
+                        }
+                    }
+                });
+    }
+
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onStart() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user!=null){ //si no es null el usuario ya esta logueado
+            //mover al usuario al dashboard
+            Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(dashboardActivity);
+        }
+        super.onStart();
+    }
+
 
 
 }

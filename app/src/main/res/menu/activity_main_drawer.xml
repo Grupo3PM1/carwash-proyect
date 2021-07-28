@@ -49,30 +49,23 @@
     </item>
 
     <item
-        android:title="Historial de Servicios Realizados"
-        android:icon="@drawable/fondop">
-        <menu>
-            <item
-                android:id="@+id/nav_c_aceite"
-                android:icon="@drawable/outline_water_drop_24"
-                android:title="Cambios de Aceite" />
+    android:title="Historial de Servicios Realizados"
+    android:icon="@drawable/fondop">
+    <menu>
+        <item
+            android:id="@+id/nav_c_aceite"
+            android:icon="@drawable/outline_water_drop_24"
+            android:title="Cambios de Aceite" />
 
-            <item
-                android:id="@+id/nav_lavados"
-                android:icon="@drawable/outline_local_car_wash_24"
-                android:title="Lavados" />
-        </menu>
-    </item>
+        <item
+            android:id="@+id/nav_lavados"
+            android:icon="@drawable/outline_local_car_wash_24"
+            android:title="Lavados" />
+    </menu>
+</item>
 
-    <item android:title=""
-        android:icon="@drawable/fondop">
-        <menu>
-            <item
-                android:id="@+id/nav_"
-                android:icon="@drawable/outline_logout_24"
-                android:title="Cerrar Sesion" />
-        </menu>
-    </item>
+
+
 
 
 </menu>

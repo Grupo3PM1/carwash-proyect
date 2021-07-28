@@ -1,40 +1,39 @@
 package com.aplicacion.elcatrachocarwash.ui.configuracionPerfil;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.aplicacion.elcatrachocarwash.LoginActivity;
 import com.aplicacion.elcatrachocarwash.R;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import java.io.ObjectInput;
-
-public class PerfilUsuarioFragment extends Fragment{
+public class PerfilUsuarioFragment extends Fragment {
 
      ImageView img;
-     EditText ttnombre, ttapellido, ttpais,ttemail;
+     TextView ttnombre, ttemail, ttpais;
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInOptions gso;
     private FirebaseAuth mAuth;
-    ImageButton btn_sesion;
+    ImageButton btn_cerrarsesion;
 
 
 
@@ -42,24 +41,65 @@ public class PerfilUsuarioFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_perfil_usuario, container, false);
-        ttnombre = (EditText)view.findViewById(R.id.ttnombre);
-        ttapellido = (EditText)view.findViewById(R.id.ttapellido);
-        ttpais = (EditText)view.findViewById(R.id.ttpais);
-        ttemail = (EditText)view.findViewById(R.id.ttemail);
-        img = (ImageView) view.findViewById(R.id.img);
+
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+
+
+        btn_cerrarsesion = (ImageButton)view.findViewById(R.id.btn_cerrarsesion);
+        ttnombre = (TextView)view.findViewById(R.id.ttnombre);
+        ttpais = (TextView)view.findViewById(R.id.ttpais);
+        ttemail = (TextView)view.findViewById(R.id.ttemail);
+        img = (ImageView)view.findViewById(R.id.img);
+
+        //INICIALIZAR FIREBASE PARA OBTENER EL USUARIO ACTUAL
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        ttnombre.setText(currentUser.getDisplayName());
+        ttemail.setText(currentUser.getEmail());
+
+        //cargar imágen con glide:
+        Glide.with(this).load(currentUser.getPhotoUrl()).into(img);
 
 
 
+        btn_cerrarsesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //CERRAR SESION EN FIREBASE
+                mAuth.signOut();
 
+                //cerrar son google
+                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //Abrir MainActivity con SigIn button
+                        if(task.isSuccessful()){
+                            Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                            PerfilUsuarioFragment.this.getActivity().finish();
+                        }else{
+                            Toast.makeText(getActivity().getApplicationContext(), "No se pudo cerrar sesión con google",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
 
         return view;
 
 
 
 
-    }
 
-    public interface OnFragmentInteractionListener {
 
     }
+
+
 }
