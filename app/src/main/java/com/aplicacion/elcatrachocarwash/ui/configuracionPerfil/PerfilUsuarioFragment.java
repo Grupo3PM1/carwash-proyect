@@ -64,6 +64,8 @@ public class PerfilUsuarioFragment extends Fragment {
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // QUITAAAAAAAAAAAAAAAAAAR
         if (user != null) {
             name = user.getDisplayName();
             email = user.getEmail();

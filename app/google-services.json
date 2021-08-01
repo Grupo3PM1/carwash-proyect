@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "110970861334",
+    "firebase_url": "https://proyecto-login-cd5cc-default-rtdb.firebaseio.com",
+    "project_id": "proyecto-login-cd5cc",
+    "storage_bucket": "proyecto-login-cd5cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110970861334:android:4622433c5fee4d9df4c237",
+        "android_client_info": {
+          "package_name": "com.aplicacion.elcatrachocarwash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "110970861334-qtvbr3b84p3khob237nirbn72gg3fvr2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aplicacion.elcatrachocarwash",
+            "certificate_hash": "a25b61748629014b14cc82067be356611a22d2a4"
+          }
+        },
+        {
+          "client_id": "110970861334-tbrgg8938uflr86ivhbfir6biihg0t36.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aplicacion.elcatrachocarwash",
+            "certificate_hash": "f462f0642093523126dca861d88c6dd0852e3fb1"
+          }
+        },
+        {
+          "client_id": "110970861334-ndtog74prtrr444slam4bkpcsbf3ga8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkv-Y2znJL_PHJsINusBzQvuNUwlwj3VE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "110970861334-ndtog74prtrr444slam4bkpcsbf3ga8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
