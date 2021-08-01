@@ -1,6 +1,7 @@
 package com.aplicacion.elcatrachocarwash.ui.configuracionPerfil;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,8 @@ public class PerfilUsuarioFragment extends Fragment {
     private GoogleSignInOptions gso;
     private FirebaseAuth mAuth;
     ImageButton btn_cerrarsesion;
+    String name, email;
+    Uri photoUrl;
 
 
 
@@ -60,11 +63,20 @@ public class PerfilUsuarioFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        ttnombre.setText(currentUser.getDisplayName());
-        ttemail.setText(currentUser.getEmail());
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            name = user.getDisplayName();
+            email = user.getEmail();
+            photoUrl = user.getPhotoUrl();
+
+        }
+
+        ttnombre.setText(name);
+        ttemail.setText(email);
 
         //cargar imágen con glide:
-        Glide.with(this).load(currentUser.getPhotoUrl()).into(img);
+        Glide.with(this).load(photoUrl);
+
 
 
 

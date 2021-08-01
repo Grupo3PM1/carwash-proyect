@@ -20,13 +20,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.jetbrains.annotations.NotNull;
 
 
 public class RegistrarUsuario extends AppCompatActivity {
 
-    EditText tt_nombre, tt_apellido, tt_email, tt_contra, tt_pais;
+    EditText tt_nombreap, tt_apellidoap, tt_email, tt_contra;
     Button btn_registrar;
     private FirebaseAuth mAuth;
     AwesomeValidation awesomenValitation;
@@ -41,7 +42,8 @@ public class RegistrarUsuario extends AppCompatActivity {
         awesomenValitation.addValidation(this,R.id.tt_email, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
         awesomenValitation.addValidation(this,R.id.tt_contra, ".{6,}",R.string.invalid_password);
 
-
+        tt_nombreap = (EditText) findViewById(R.id.tt_nombreap);
+        tt_apellidoap = (EditText) findViewById(R.id.tt_apellidoap);
         tt_email = (EditText) findViewById(R.id.tt_email);
         tt_contra = (EditText) findViewById(R.id.tt_contra);
         btn_registrar = (Button) findViewById(R.id.btn_iniciar);
@@ -67,12 +69,10 @@ public class RegistrarUsuario extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                user.sendEmailVerification();
                                 Toast.makeText(RegistrarUsuario.this, "CUENTA CREADA CON EXITO", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegistrarUsuario.this, PerfilUsuarioFragment.class);
-                                intent.putExtra("Nombre",tt_nombre.getText().toString());
-                                intent.putExtra("Apellido",tt_apellido.getText().toString());
-                                intent.putExtra("Pais",tt_pais.getText().toString());
-                                intent.putExtra("Correo",tt_email.getText().toString());
+                                Intent intent = new Intent(RegistrarUsuario.this, LoginActivity.class);
                                 startActivity(intent);
                             }else{
                                 String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
