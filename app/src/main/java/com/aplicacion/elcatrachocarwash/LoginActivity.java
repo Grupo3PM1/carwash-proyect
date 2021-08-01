@@ -106,7 +106,10 @@ public class LoginActivity extends AppCompatActivity{
                         public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
 
                             if(task.isSuccessful()){
-                                login();
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if(!user.isEmailVerified()){
+                                    Toast.makeText(LoginActivity.this, "Correo electronico no verificado", Toast.LENGTH_LONG).show();
+                                }
 
                             }else{
                                 String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
@@ -122,11 +125,7 @@ public class LoginActivity extends AppCompatActivity{
 
     }
 
-    private void login() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
+
 
     private void dameToastdeerror(String error) {
 
@@ -265,7 +264,7 @@ public class LoginActivity extends AppCompatActivity{
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    @Override
+  /*  @Override
     protected void onStart() {
         FirebaseUser user = mAuth.getCurrentUser();
         if(user!=null){ //si no es null el usuario ya esta logueado
@@ -274,7 +273,7 @@ public class LoginActivity extends AppCompatActivity{
             startActivity(dashboardActivity);
         }
         super.onStart();
-    }
+    }*/
 
 
 
