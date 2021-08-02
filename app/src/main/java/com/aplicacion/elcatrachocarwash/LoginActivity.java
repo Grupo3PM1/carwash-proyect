@@ -54,9 +54,6 @@ public class LoginActivity extends AppCompatActivity{
     AwesomeValidation awesomenValitation;
     Button btn_iniciar, btn_restablecer;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -80,15 +77,12 @@ public class LoginActivity extends AppCompatActivity{
         // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-
         btn_google = (ImageButton) findViewById(R.id.btn_google);
         btn_iniciar = (Button)findViewById(R.id.btn_iniciar);
         txtEmail = (EditText)findViewById(R.id.txtEmail);
         txtPass = (EditText)findViewById(R.id.txtPass);
         tt_sign = (TextView)findViewById(R.id.tt_sign);
         tt_restablecercontra = (TextView)findViewById(R.id.tt_restablecercontra);
-
-
 
         tt_sign.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +98,7 @@ public class LoginActivity extends AppCompatActivity{
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                 View child = getLayoutInflater().inflate(R.layout.activity_restablecer, null);
 
-                builder.setCancelable(false);
+                builder.setCancelable(true);
 
                 AlertDialog titulo = builder.create();
                 titulo.setView(child);
@@ -112,14 +106,12 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
               signIn();
             }
         });
-
 
         btn_iniciar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +136,6 @@ public class LoginActivity extends AppCompatActivity{
                                 String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
                                 dameToastdeerror(errorCode);
                             }
-
                         }
                     });
 
