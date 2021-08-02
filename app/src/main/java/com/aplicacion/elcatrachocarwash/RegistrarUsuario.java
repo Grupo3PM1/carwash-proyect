@@ -51,10 +51,13 @@ public class RegistrarUsuario extends AppCompatActivity {
     AwesomeValidation awesomenValitation;
     TextView tt_sign2;
 
-    //Array de Paises en Spinner
+    // Array de Paises en Spinner
     private ArrayList<String> Paises;
     private Spinner sp_paisap;
     private static final String DEFAULT_LOCAL = "Honduras";
+    private String elemento;
+
+    private String uid; // UID del Usuario
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +66,10 @@ public class RegistrarUsuario extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomenValitation.addValidation(this,R.id.tt_email, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
-        awesomenValitation.addValidation(this,R.id.tt_contra, ".{6,}",R.string.invalid_password);
+        awesomenValitation.addValidation(this, R.id.tt_nombreap, "[a-zA-Z\\s]+", R.string.invalid_name1);
+        awesomenValitation.addValidation(this, R.id.tt_apellidoap, "[a-zA-Z\\s]+", R.string.invalid_name2);
+        awesomenValitation.addValidation(this, R.id.tt_email, Patterns.EMAIL_ADDRESS, R.string.invalid_mail);
+        awesomenValitation.addValidation(this, R.id.tt_contra, ".{6,}", R.string.invalid_password);
 
         tt_nombreap = (EditText) findViewById(R.id.tt_nombreap);
         tt_apellidoap = (EditText) findViewById(R.id.tt_apellidoap);
@@ -84,8 +89,7 @@ public class RegistrarUsuario extends AppCompatActivity {
         sp_paisap.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String elemento = (String) sp_paisap.getAdapter().getItem(position);
-                Toast.makeText(RegistrarUsuario.this, "Seleccionaste: " + elemento, Toast.LENGTH_LONG).show();
+                elemento = (String) sp_paisap.getAdapter().getItem(position);   // El elemento seleccionado del Spinner
             }
 
             @Override
@@ -118,8 +122,7 @@ public class RegistrarUsuario extends AppCompatActivity {
                                 user.sendEmailVerification();
                                 Toast.makeText(RegistrarUsuario.this, "CUENTA CREADA CON EXITO", Toast.LENGTH_SHORT).show();
 
-                                // Insertar();
-
+                                InsertEmail();
 
                                 Intent intent = new Intent(RegistrarUsuario.this, LoginActivity.class);
                                 startActivity(intent);
@@ -218,10 +221,26 @@ public class RegistrarUsuario extends AppCompatActivity {
         }
     }
 
-    /*
+    private void GetUID() {
+
+        mAuth = FirebaseAuth.getInstance(); // Iniciar Firebase
+        FirebaseUser user = mAuth.getCurrentUser();  // Obtener Usuario Actual
+
+        // Si usuario no existe
+        try {
+            if (user != null) {
+                uid = user.getUid(); // Obtener el UID del Usuario Actual
+            }
+        }
+        catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Error: "+ e, Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void InsertEmail() {
 
-        String url = RestApiMethod.ApiPostUrl;
+        GetUID();   // Obtener funcion UID para almacenarlo
+        String url = RestApiMethod.ApiPostClientUrl;    // URL del RestAPI
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -238,18 +257,15 @@ public class RegistrarUsuario extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 HashMap<String, String> parametros = new HashMap<String, String>();
-                parametros.put("uid", etnombre.getText().toString());
-                parametros.put("correo", ettelefono.getText().toString());
-                parametros.put("nombre", etlatitud.getText().toString());
-                parametros.put("pais", etlongitud.getText().toString());
+                parametros.put("uid", uid);
+                parametros.put("correo", tt_email.getText().toString());
+                parametros.put("nombre", tt_nombreap.getText().toString()+" "+tt_apellidoap.getText().toString());
+                parametros.put("pais", elemento);
                 return parametros;
             }
-
         };
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(stringRequest);
     }
-
-     */
 }
