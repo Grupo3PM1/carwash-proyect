@@ -68,7 +68,6 @@ public class PerfilUsuarioFragment extends Fragment {
             name = user.getDisplayName();
             email = user.getEmail();
             photoUrl = user.getPhotoUrl();
-
         }
 
         ttnombre.setText(name);

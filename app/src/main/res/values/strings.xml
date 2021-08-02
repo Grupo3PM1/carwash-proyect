@@ -16,5 +16,8 @@
 
     <string name="invalid_mail">Ingrese un correo electronico valido</string>
     <string name="invalid_password">La contraseña debe ser mayor a 6 digitos</string>
+    <string name="dialog_fire_missiles">Bienvenido</string>
+    <string name="fire">Dialog</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
