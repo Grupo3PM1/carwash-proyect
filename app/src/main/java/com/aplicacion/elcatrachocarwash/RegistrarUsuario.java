@@ -5,12 +5,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import com.aplicacion.elcatrachocarwash.ui.configuracionPerfil.PerfilUsuarioFragment;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -23,6 +35,12 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RegistrarUsuario extends AppCompatActivity {
@@ -33,10 +51,16 @@ public class RegistrarUsuario extends AppCompatActivity {
     AwesomeValidation awesomenValitation;
     TextView tt_sign2;
 
+    //Array de Paises en Spinner
+    private ArrayList<String> Paises;
+    private Spinner sp_paisap;
+    private static final String DEFAULT_LOCAL = "Honduras";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar_usuario);
+
         mAuth = FirebaseAuth.getInstance();
         awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomenValitation.addValidation(this,R.id.tt_email, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
@@ -48,6 +72,27 @@ public class RegistrarUsuario extends AppCompatActivity {
         tt_contra = (EditText) findViewById(R.id.tt_contra);
         btn_registrar = (Button) findViewById(R.id.btn_iniciar);
         tt_sign2 = (TextView) findViewById(R.id.tt_sign2);
+        sp_paisap = (Spinner) findViewById(R.id.sp_paisap); //Elemento del Spinner de Paises
+
+        String[] paises = getResources().getStringArray(R.array.countries);
+        Paises = new ArrayList<>(Arrays.asList(paises));
+
+        ArrayAdapter adp = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, Paises);
+        sp_paisap.setAdapter(adp);
+        sp_paisap.setSelection(adp.getPosition(DEFAULT_LOCAL));
+
+        sp_paisap.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String elemento = (String) sp_paisap.getAdapter().getItem(position);
+                Toast.makeText(RegistrarUsuario.this, "Seleccionaste: " + elemento, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         tt_sign2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +117,10 @@ public class RegistrarUsuario extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 user.sendEmailVerification();
                                 Toast.makeText(RegistrarUsuario.this, "CUENTA CREADA CON EXITO", Toast.LENGTH_SHORT).show();
+
+                                // Insertar();
+
+
                                 Intent intent = new Intent(RegistrarUsuario.this, LoginActivity.class);
                                 startActivity(intent);
                             }else{
@@ -166,10 +215,41 @@ public class RegistrarUsuario extends AppCompatActivity {
                 tt_contra.setError("La contraseña no es válida, debe tener al menos 6 caracteres");
                 tt_contra.requestFocus();
                 break;
-
         }
-
-
     }
 
+    /*
+    private void InsertEmail() {
+
+        String url = RestApiMethod.ApiPostUrl;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Error en Response", "onResponse: " + error.getMessage().toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                HashMap<String, String> parametros = new HashMap<String, String>();
+                parametros.put("uid", etnombre.getText().toString());
+                parametros.put("correo", ettelefono.getText().toString());
+                parametros.put("nombre", etlatitud.getText().toString());
+                parametros.put("pais", etlongitud.getText().toString());
+                return parametros;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(stringRequest);
+    }
+
+     */
 }
