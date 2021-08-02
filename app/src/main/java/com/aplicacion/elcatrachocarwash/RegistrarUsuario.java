@@ -136,10 +136,8 @@ public class RegistrarUsuario extends AppCompatActivity {
                 }else{
                     Toast.makeText(RegistrarUsuario.this, "INGRESE LOS DATOS", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
-
     }
 
     private void dameToastdeerror(String error) {

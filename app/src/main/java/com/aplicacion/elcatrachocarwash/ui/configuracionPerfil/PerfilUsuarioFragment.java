@@ -16,6 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.aplicacion.elcatrachocarwash.LoginActivity;
 import com.aplicacion.elcatrachocarwash.R;
 import com.bumptech.glide.Glide;
@@ -27,18 +32,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class PerfilUsuarioFragment extends Fragment {
 
      ImageView img;
      TextView ttnombre, ttemail, ttpais;
-    private GoogleSignInClient mGoogleSignInClient;
-    private GoogleSignInOptions gso;
-    private FirebaseAuth mAuth;
-    ImageButton btn_cerrarsesion;
-    String name, email;
-    Uri photoUrl;
+     private GoogleSignInClient mGoogleSignInClient;
+     private GoogleSignInOptions gso;
+     private FirebaseAuth mAuth;
+     ImageButton btn_cerrarsesion;
+     String name, email;
+     Uri photoUrl;
 
-
+    private String uid; // UID del Usuario
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,34 +61,16 @@ public class PerfilUsuarioFragment extends Fragment {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
 
-
         btn_cerrarsesion = (ImageButton)view.findViewById(R.id.btn_cerrarsesion);
         ttnombre = (TextView)view.findViewById(R.id.ttnombre);
         ttpais = (TextView)view.findViewById(R.id.ttpais);
         ttemail = (TextView)view.findViewById(R.id.ttemail);
         img = (ImageView)view.findViewById(R.id.img);
 
-        //INICIALIZAR FIREBASE PARA OBTENER EL USUARIO ACTUAL
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        // QUITAAAAAAAAAAAAAAAAAAR
-        if (user != null) {
-            name = user.getDisplayName();
-            email = user.getEmail();
-            photoUrl = user.getPhotoUrl();
-        }
-
-        ttnombre.setText(name);
-        ttemail.setText(email);
+        GetUser(); // Cargar Datos del Usuario
 
         //cargar imágen con glide:
         Glide.with(this).load(photoUrl);
-
-
-
 
         btn_cerrarsesion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,13 +97,49 @@ public class PerfilUsuarioFragment extends Fragment {
         });
 
         return view;
-
-
-
-
-
-
     }
 
+    private void GetUser() {
 
+        mAuth = FirebaseAuth.getInstance(); // Iniciar Firebase
+        FirebaseUser user = mAuth.getCurrentUser();  // Obtener Usuario Actual
+
+        // Si usuario no existe
+        try {
+            if (user != null) {
+                uid = user.getUid(); // Obtener el UID del Usuario Actual
+                SearchUID("https://dandsol.000webhostapp.com/ElCatrachoCarwash/buscar_cliente.php?uid="+uid+"");
+            }
+        }
+        catch (Exception e) {
+            Toast.makeText(getContext(), "Error: "+ e, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void SearchUID(String URL) {
+        JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                JSONObject jsonObject = null;
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        jsonObject = response.getJSONObject(i);
+                        ttnombre.setText(jsonObject.getString("clnt_nombre"));
+                        ttpais.setText(jsonObject.getString("clnt_pais"));
+                        ttemail.setText(jsonObject.getString("clnt_email"));
+                    } catch (JSONException e) {
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), "Error de conexion", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        RequestQueue requestQueue= Volley.newRequestQueue(this.getActivity());
+        requestQueue.add(jsonArrayRequest);
+    }
 }
