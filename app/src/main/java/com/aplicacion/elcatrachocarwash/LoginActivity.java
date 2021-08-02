@@ -1,18 +1,27 @@
 package com.aplicacion.elcatrachocarwash;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -41,17 +50,18 @@ public class LoginActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     ImageButton btn_google;
     TextView tt_sign, tt_restablecercontra;
-    EditText txtEmail, txtPass;
+    EditText txtEmail, txtPass, ttEmailRestablecer;
     AwesomeValidation awesomenValitation;
-    Button btn_iniciar;
+    Button btn_iniciar, btn_restablecer;
 
 
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
 
         mAuth = FirebaseAuth.getInstance();
         awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
@@ -78,6 +88,8 @@ public class LoginActivity extends AppCompatActivity{
         tt_sign = (TextView)findViewById(R.id.tt_sign);
         tt_restablecercontra = (TextView)findViewById(R.id.tt_restablecercontra);
 
+
+
         tt_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +97,21 @@ public class LoginActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+
+        tt_restablecercontra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                View child = getLayoutInflater().inflate(R.layout.activity_restablecer, null);
+
+                builder.setCancelable(false);
+
+                AlertDialog titulo = builder.create();
+                titulo.setView(child);
+                titulo.show();
+            }
+        });
+
 
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +136,8 @@ public class LoginActivity extends AppCompatActivity{
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 if(!user.isEmailVerified()){
                                     Toast.makeText(LoginActivity.this, "Correo electronico no verificado", Toast.LENGTH_LONG).show();
+                                }else{
+                                    onStart();
                                 }
 
                             }else{
@@ -124,7 +153,6 @@ public class LoginActivity extends AppCompatActivity{
         });
 
     }
-
 
 
     private void dameToastdeerror(String error) {
@@ -264,7 +292,7 @@ public class LoginActivity extends AppCompatActivity{
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-  /*  @Override
+  @Override
     protected void onStart() {
         FirebaseUser user = mAuth.getCurrentUser();
         if(user!=null){ //si no es null el usuario ya esta logueado
@@ -273,8 +301,6 @@ public class LoginActivity extends AppCompatActivity{
             startActivity(dashboardActivity);
         }
         super.onStart();
-    }*/
-
-
+    }
 
 }
