@@ -18,5 +18,6 @@
     <string name="invalid_password">La contraseña debe ser mayor a 6 digitos</string>
     <string name="invalid_name1">Ingrese un nombre valido</string>
     <string name="invalid_name2">Ingrese un apellido valido</string>
+    <string name="no_coinciden">Las contraseñas no coinciden</string>
 
 </resources>

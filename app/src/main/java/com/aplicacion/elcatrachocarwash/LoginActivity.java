@@ -42,40 +42,41 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.jetbrains.annotations.NotNull;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
+    //VARIABLES GLOBALES//
     int RC_SIGN_IN = 111;
     String TAG = "GoogleSignIn";
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     ImageButton btn_google;
     TextView tt_sign, tt_restablecercontra;
-    EditText txtEmail, txtPass, ttEmailRestablecer;
+    EditText txtEmail, txtPass;
     AwesomeValidation awesomenValitation;
-    Button btn_iniciar, btn_restablecer;
+    Button btn_iniciar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
+        ///Inicializamos Firebase para conectarnos a una instancia existente
         mAuth = FirebaseAuth.getInstance();
+
+        ///Validamos que el formato de correo y contraseña esten correctos
         awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomenValitation.addValidation(this,R.id.txtEmail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
         awesomenValitation.addValidation(this,R.id.txtPass, ".{6,}",R.string.invalid_password);
 
-        // Configurar Google Sign In
+        // Configuramos el registro con Google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        // Crear un GoogleSignInClient con las opciones especificadas por gso.
+        // Creamos el inicio de sesion del usuario con las opciones especificadas por la variable gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Inicializar Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
 
         btn_google = (ImageButton) findViewById(R.id.btn_google);
         btn_iniciar = (Button)findViewById(R.id.btn_iniciar);
@@ -84,6 +85,10 @@ public class LoginActivity extends AppCompatActivity{
         tt_sign = (TextView)findViewById(R.id.tt_sign);
         tt_restablecercontra = (TextView)findViewById(R.id.tt_restablecercontra);
 
+
+        //-------- INICIO DE EVENTO ONCLICK CON LOS BOTONES --------///
+
+        //Crear una cuenta nueva, nos envia al Activity de RegistrarUsuario//
         tt_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,20 +97,16 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
+        //Restablecer contraseña, nos envia al Activity de ActivityRestablecer//
         tt_restablecercontra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                View child = getLayoutInflater().inflate(R.layout.activity_restablecer, null);
-
-                builder.setCancelable(true);
-
-                AlertDialog titulo = builder.create();
-                titulo.setView(child);
-                titulo.show();
+                Intent intent = new Intent(LoginActivity.this, ActivityRestablecer.class);
+                startActivity(intent);
             }
         });
 
+        //Acceso con Google, ejecuta el metodo SignIn//
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,39 +114,54 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
+        //Acceso con Correo Electronico Verificado//
         btn_iniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(awesomenValitation.validate()){
                     String email = txtEmail.getText().toString();
                     String pass = txtPass.getText().toString();
 
+                    /// El correo electronico y la contraseña que el usuario ingresen lo pasamos a signInWithEmailAndPassword
+                    ///una vez que el correo electronico este verificado (ESTO PUEDE VERLO MEJOR EN EL ACTIVITY DE REGISTRAR USUARIO)
                     mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-
+                          ///Task<AuthResult> devuelve un AuthResult, almacenado en un task cuando el objeto tenga exito
                             if(task.isSuccessful()){
+                                //si el task es correcto, es decir, si evalua que el correo ya esta verificado por el usuario
+                                //Creamos una variable de tipo FirebaseUser que llamaremos user que obtendra el usuario cuya sesion este activa, lo hacemos con el getCurrentUser()
                                 FirebaseUser user = mAuth.getCurrentUser();
+                                //luego verificamos el correo del usuario con isEmailVerified
+                                // Devuelve true si se verifica el correo electrónico del usuario.
                                 if(!user.isEmailVerified()){
+                                    ///si user devuelve un valor false, enviamos un mensaje al usuario con un Toast
+                                    //donde le coomunicamos que todavia no ha ido a verificar su correo con el enlace que le enviamos
                                     Toast.makeText(LoginActivity.this, "Correo electronico no verificado", Toast.LENGTH_LONG).show();
                                 }else{
-                                    onStart();
+                                    // si User nos devuelve un valor true significa que el correo esta verificado
+                                    // Accede a la aplicacion
+                                    Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(dashboardActivity);
                                 }
 
-                            }else{
+                            }
+                            ///Si al ingresar el correo y la contraseña, el usuario no puede acceder, esto puede significar varios problemas
+                            //Puede ser que el correo no este verificado, o que el correo haya sido modificado o ya no exista
+                            //por lo que hemos creado un metodo llamado dameToastdeerror(), donde se registran todos los posibles errores
+                            else{
                                 String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
                                 dameToastdeerror(errorCode);
                             }
                         }
                     });
-
-                }
             }
         });
 
+        //-------- FINAL DE EVENTO ONCLICK CON LOS BOTONES --------///
+
     }
 
-
+    ///Posibles probllemas si existe algun error en awesomenValitation
     private void dameToastdeerror(String error) {
 
         switch (error) {
@@ -228,11 +244,12 @@ public class LoginActivity extends AppCompatActivity{
 
     }
 
+
+    //-------- INICIO DE LOS METODOS PARA ACCEDER CON GOOGLE--------///
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //Resultado devuelto al iniciar el Intent de GoogleSignInApi.getSignInIntent (...);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             if (task.isSuccessful()) {
@@ -277,21 +294,13 @@ public class LoginActivity extends AppCompatActivity{
                 });
     }
 
-
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-  @Override
-    protected void onStart() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if(user!=null){ //si no es null el usuario ya esta logueado
-            //mover al usuario al dashboard
-            Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(dashboardActivity);
-        }
-        super.onStart();
-    }
+    //-------- FINAL DE LOS METODOS PARA ACCEDER CON GOOGLE--------///
+
+
 
 }

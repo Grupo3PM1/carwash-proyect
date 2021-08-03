@@ -14,8 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ElCatrachoCarwash">
-        <activity android:name=".ActivityRestablecer"></activity>
-        <activity android:name=".RegistrarUsuario" />
+        <activity
+            android:name=".ActivityRestablecer"
+            android:theme="@style/Theme.ElCatrachoCarwash.NoActionBar"/>
+
+
+        <activity android:name=".RegistrarUsuario"
+            android:theme="@style/Theme.ElCatrachoCarwash.NoActionBar"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -27,6 +32,7 @@
         <activity
             android:name=".LoginActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+
         <activity
             android:name=".SplashScreen"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">

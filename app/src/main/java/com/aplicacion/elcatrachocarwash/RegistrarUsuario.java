@@ -45,7 +45,7 @@ import java.util.Map;
 
 public class RegistrarUsuario extends AppCompatActivity {
 
-    EditText tt_nombreap, tt_apellidoap, tt_email, tt_contra;
+    EditText tt_nombreap, tt_apellidoap, tt_email, tt_contra, tt_confirmar;
     Button btn_registrar;
     private FirebaseAuth mAuth;
     AwesomeValidation awesomenValitation;
@@ -70,11 +70,14 @@ public class RegistrarUsuario extends AppCompatActivity {
         awesomenValitation.addValidation(this, R.id.tt_apellidoap, "[a-zA-Z\\s]+", R.string.invalid_name2);
         awesomenValitation.addValidation(this, R.id.tt_email, Patterns.EMAIL_ADDRESS, R.string.invalid_mail);
         awesomenValitation.addValidation(this, R.id.tt_contra, ".{6,}", R.string.invalid_password);
+        awesomenValitation.addValidation(this, R.id.tt_confirmar, R.id.tt_contra,R.string.no_coinciden);
+
 
         tt_nombreap = (EditText) findViewById(R.id.tt_nombreap);
         tt_apellidoap = (EditText) findViewById(R.id.tt_apellidoap);
         tt_email = (EditText) findViewById(R.id.tt_email);
         tt_contra = (EditText) findViewById(R.id.tt_contra);
+        tt_confirmar = (EditText) findViewById(R.id.tt_confirmar);
         btn_registrar = (Button) findViewById(R.id.btn_iniciar);
         tt_sign2 = (TextView) findViewById(R.id.tt_sign2);
         sp_paisap = (Spinner) findViewById(R.id.sp_paisap); //Elemento del Spinner de Paises
@@ -120,12 +123,10 @@ public class RegistrarUsuario extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 user.sendEmailVerification();
-                                Toast.makeText(RegistrarUsuario.this, "CUENTA CREADA CON EXITO", Toast.LENGTH_SHORT).show();
-
-                                InsertEmail();
-
                                 Intent intent = new Intent(RegistrarUsuario.this, LoginActivity.class);
                                 startActivity(intent);
+                                InsertEmail();
+
                             }else{
                                 String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
                                 dameToastdeerror(errorCode);
@@ -133,8 +134,6 @@ public class RegistrarUsuario extends AppCompatActivity {
 
                         }
                     });
-                }else{
-                    Toast.makeText(RegistrarUsuario.this, "INGRESE LOS DATOS", Toast.LENGTH_SHORT).show();
                 }
             }
         });
