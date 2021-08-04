@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 
+import com.aplicacion.elcatrachocarwash.ui.configuracionPerfil.PerfilUsuarioFragment;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -45,7 +46,7 @@ import org.jetbrains.annotations.NotNull;
 public class LoginActivity extends AppCompatActivity {
 
     //VARIABLES GLOBALES//
-    int RC_SIGN_IN = 111;
+    int RC_SIGN_IN = 1;
     String TAG = "GoogleSignIn";
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
@@ -60,14 +61,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ///Inicializamos Firebase para conectarnos a una instancia existente
-        mAuth = FirebaseAuth.getInstance();
-
-        ///Validamos que el formato de correo y contraseña esten correctos
-        awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomenValitation.addValidation(this,R.id.txtEmail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
-        awesomenValitation.addValidation(this,R.id.txtPass, ".{6,}",R.string.invalid_password);
-
         // Configuramos el registro con Google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -76,6 +69,14 @@ public class LoginActivity extends AppCompatActivity {
 
         // Creamos el inicio de sesion del usuario con las opciones especificadas por la variable gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        ///Inicializamos Firebase para conectarnos a una instancia existente
+        mAuth = FirebaseAuth.getInstance();
+
+        ///Validamos que el formato de correo y contraseña esten correctos
+        awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
+        awesomenValitation.addValidation(this,R.id.txtEmail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
+        awesomenValitation.addValidation(this,R.id.txtPass, ".{6,}",R.string.invalid_password);
 
 
         btn_google = (ImageButton) findViewById(R.id.btn_google);
@@ -110,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              signIn();
+                signIn();
             }
         });
 
@@ -142,8 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }else{
                                         // si User nos devuelve un valor true significa que el correo esta verificado
                                         // Accede a la aplicacion
-                                        Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(dashboardActivity);
+                                        ingresar();
                                     }
 
                                 }
@@ -167,6 +167,8 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
+    ///Limpiar los Editext
     private void clean() {
         txtEmail.setText("");
         txtPass.setText("");
@@ -256,7 +258,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    //-------- INICIO DE LOS METODOS PARA ACCEDER CON GOOGLE--------///
+    //-------- MUERTE AL QUE TOQUE ESTOS METODOS -------///
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -293,8 +301,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             //FirebaseUser user = mAuth.getCurrentUser();
                                 //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
-                            Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(dashboardActivity);
+                            Intent manActivity = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(manActivity);
                             LoginActivity.this.finish();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -305,12 +313,18 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+    private void ingresar() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user!=null){ //si no es null el usuario ya esta logueado
+            //mover al usuario al dashboard
+            Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(dashboardActivity);
+        }
+
     }
 
-    //-------- FINAL DE LOS METODOS PARA ACCEDER CON GOOGLE--------///
+
+    //-------- MUERTE AL QUE TOQUE ESTOS METODOS--------///
 
 
 

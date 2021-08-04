@@ -69,7 +69,15 @@ public class PerfilUsuarioFragment extends Fragment {
 
         GetUser(); // Cargar Datos del Usuario
 
-        //cargar imágen con glide:
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        name = currentUser.getDisplayName();
+        email = currentUser.getEmail();
+        photoUrl = currentUser.getPhotoUrl();
+
+        ttnombre.setText(name);
+        ttemail.setText(email);
         Glide.with(this).load(photoUrl);
 
         btn_cerrarsesion.setOnClickListener(new View.OnClickListener() {

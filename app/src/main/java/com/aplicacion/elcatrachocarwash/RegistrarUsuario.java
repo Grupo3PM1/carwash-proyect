@@ -286,9 +286,15 @@ public class RegistrarUsuario extends AppCompatActivity {
             // Use the Builder class for convenient dialog construction
             AlertDialog.Builder builder = new AlertDialog.Builder(RegistrarUsuario.this);
             builder.setMessage("Hemos enviado un enlace de verificacion a "+correo+". Por favor revise su bandeja de entrada y carpeta de correo no deseado");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+               @Override
+               public void onClick(DialogInterface dialog, int which) {
+                   finish();
+               }
+           });
             // Create the AlertDialog object and return it
             AlertDialog titulo =builder.create();
-            titulo.setTitle("Esta alerta se cerrara en breve");
             titulo.show();
 
 
