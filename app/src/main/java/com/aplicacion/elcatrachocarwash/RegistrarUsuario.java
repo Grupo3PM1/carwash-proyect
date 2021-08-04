@@ -2,7 +2,11 @@ package com.aplicacion.elcatrachocarwash;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,13 +54,15 @@ public class RegistrarUsuario extends AppCompatActivity {
     private FirebaseAuth mAuth;
     AwesomeValidation awesomenValitation;
     TextView tt_sign2;
+    String correo, contra;
+
 
     // Array de Paises en Spinner
     private ArrayList<String> Paises;
+    ArrayAdapter adp;
     private Spinner sp_paisap;
     private static final String DEFAULT_LOCAL = "Honduras";
     private String elemento;
-
     private String uid; // UID del Usuario
 
     @Override
@@ -85,7 +91,7 @@ public class RegistrarUsuario extends AppCompatActivity {
         String[] paises = getResources().getStringArray(R.array.countries);
         Paises = new ArrayList<>(Arrays.asList(paises));
 
-        ArrayAdapter adp = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, Paises);
+        adp = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, Paises);
         sp_paisap.setAdapter(adp);
         sp_paisap.setSelection(adp.getPosition(DEFAULT_LOCAL));
 
@@ -113,8 +119,8 @@ public class RegistrarUsuario extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String correo = tt_email.getText().toString();
-                String contra = tt_contra.getText().toString();
+                correo = tt_email.getText().toString();
+                contra = tt_contra.getText().toString();
 
                 if(awesomenValitation.validate()){
                     mAuth.createUserWithEmailAndPassword(correo,contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -123,9 +129,9 @@ public class RegistrarUsuario extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 user.sendEmailVerification();
-                                Intent intent = new Intent(RegistrarUsuario.this, LoginActivity.class);
-                                startActivity(intent);
+                                onCreateDialog();
                                 InsertEmail();
+                                clean();
 
                             }else{
                                 String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
@@ -137,6 +143,15 @@ public class RegistrarUsuario extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void clean() {
+        tt_nombreap.setText("");
+        tt_apellidoap.setText("");
+        tt_email.setText("");
+        tt_contra.setText("");
+        tt_confirmar.setText("");
+        sp_paisap.setSelection(adp.getPosition(DEFAULT_LOCAL));
     }
 
     private void dameToastdeerror(String error) {
@@ -265,4 +280,18 @@ public class RegistrarUsuario extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(stringRequest);
     }
+
+
+       private void onCreateDialog() {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(RegistrarUsuario.this);
+            builder.setMessage("Hemos enviado un enlace de verificacion a "+correo+". Por favor revise su bandeja de entrada y carpeta de correo no deseado");
+            // Create the AlertDialog object and return it
+            AlertDialog titulo =builder.create();
+            titulo.setTitle("Esta alerta se cerrara en breve");
+            titulo.show();
+
+
+    }
+
 }

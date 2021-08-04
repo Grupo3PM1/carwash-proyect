@@ -121,44 +121,55 @@ public class LoginActivity extends AppCompatActivity {
                     String email = txtEmail.getText().toString();
                     String pass = txtPass.getText().toString();
 
-                    /// El correo electronico y la contraseña que el usuario ingresen lo pasamos a signInWithEmailAndPassword
-                    ///una vez que el correo electronico este verificado (ESTO PUEDE VERLO MEJOR EN EL ACTIVITY DE REGISTRAR USUARIO)
-                    mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                          ///Task<AuthResult> devuelve un AuthResult, almacenado en un task cuando el objeto tenga exito
-                            if(task.isSuccessful()){
-                                //si el task es correcto, es decir, si evalua que el correo ya esta verificado por el usuario
-                                //Creamos una variable de tipo FirebaseUser que llamaremos user que obtendra el usuario cuya sesion este activa, lo hacemos con el getCurrentUser()
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                //luego verificamos el correo del usuario con isEmailVerified
-                                // Devuelve true si se verifica el correo electrónico del usuario.
-                                if(!user.isEmailVerified()){
-                                    ///si user devuelve un valor false, enviamos un mensaje al usuario con un Toast
-                                    //donde le coomunicamos que todavia no ha ido a verificar su correo con el enlace que le enviamos
-                                    Toast.makeText(LoginActivity.this, "Correo electronico no verificado", Toast.LENGTH_LONG).show();
-                                }else{
-                                    // si User nos devuelve un valor true significa que el correo esta verificado
-                                    // Accede a la aplicacion
-                                    Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(dashboardActivity);
-                                }
+                    if(awesomenValitation.validate()){
+                        /// El correo electronico y la contraseña que el usuario ingresen lo pasamos a signInWithEmailAndPassword
+                        ///una vez que el correo electronico este verificado (ESTO PUEDE VERLO MEJOR EN EL ACTIVITY DE REGISTRAR USUARIO)
+                        mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                                ///Task<AuthResult> devuelve un AuthResult, almacenado en un task cuando el objeto tenga exito
+                                if(task.isSuccessful()){
+                                    //si el task es correcto, es decir, si evalua que el correo ya esta verificado por el usuario
+                                    //Creamos una variable de tipo FirebaseUser que llamaremos user que obtendra el usuario cuya sesion este activa, lo hacemos con el getCurrentUser()
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    //luego verificamos el correo del usuario con isEmailVerified
+                                    // Devuelve true si se verifica el correo electrónico del usuario.
+                                    if(!user.isEmailVerified()){
+                                        ///si user devuelve un valor false, enviamos un mensaje al usuario con un Toast
+                                        //donde le coomunicamos que todavia no ha ido a verificar su correo con el enlace que le enviamos
+                                        clean();
+                                        Toast.makeText(LoginActivity.this, "Correo electronico no verificado", Toast.LENGTH_LONG).show();
+                                    }else{
+                                        // si User nos devuelve un valor true significa que el correo esta verificado
+                                        // Accede a la aplicacion
+                                        Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(dashboardActivity);
+                                    }
 
+                                }
+                                ///Si al ingresar el correo y la contraseña, el usuario no puede acceder, esto puede significar varios problemas
+                                //Puede ser que el correo no este verificado, o que el correo haya sido modificado o ya no exista
+                                //por lo que hemos creado un metodo llamado dameToastdeerror(), donde se registran todos los posibles errores
+                                else{
+                                    String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
+                                    dameToastdeerror(errorCode);
+                                }
                             }
-                            ///Si al ingresar el correo y la contraseña, el usuario no puede acceder, esto puede significar varios problemas
-                            //Puede ser que el correo no este verificado, o que el correo haya sido modificado o ya no exista
-                            //por lo que hemos creado un metodo llamado dameToastdeerror(), donde se registran todos los posibles errores
-                            else{
-                                String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
-                                dameToastdeerror(errorCode);
-                            }
-                        }
-                    });
+                        });
+                    }else{
+                       // Toast.makeText(LoginActivity.this,"Ingrese un correo y contraseña", Toast.LENGTH_LONG).show();
+                    }
+
             }
         });
 
         //-------- FINAL DE EVENTO ONCLICK CON LOS BOTONES --------///
 
+    }
+
+    private void clean() {
+        txtEmail.setText("");
+        txtPass.setText("");
     }
 
     ///Posibles probllemas si existe algun error en awesomenValitation
