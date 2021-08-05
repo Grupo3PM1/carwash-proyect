@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.aplicacion.elcatrachocarwash.MapsActivity;
+import com.aplicacion.elcatrachocarwash.MapsActivity2;
 import com.aplicacion.elcatrachocarwash.R;
 import com.aplicacion.elcatrachocarwash.databinding.FragmentCotizacionBinding;
 
@@ -96,7 +97,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         });
 
         spinner2 = (Spinner)view.findViewById(R.id.spubicacion);
-        arraycontenido2 = new String[]{"Centro de Servicio", "A Domicilio"};
+        arraycontenido2 = new String[]{"Seleccione","Centro de Servicio", "A Domicilio"};
         adapter2 = new com.aplicacion.elcatrachocarwash.ui.cotizacion.AdaptadorSpinner(getActivity(), arraycontenido2);
         spinner2.setAdapter(adapter2);
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -105,9 +106,15 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
                 if (isFirstTime){
                     isFirstTime = false;
                 }
+
                 if (arraycontenido2[position] == "A Domicilio"){
                     Intent intent = new Intent(getActivity(), MapsActivity.class);
                     startActivity(intent);
+                }
+                else if(arraycontenido2[position]== "Centro de Servicio"){
+                    Intent intent = new Intent(getActivity(), MapsActivity2.class);
+                    startActivity(intent);
+
                 }
             }
 
