@@ -54,7 +54,7 @@ public class RegistrarUsuario extends AppCompatActivity {
     private FirebaseAuth mAuth;
     AwesomeValidation awesomenValitation;
     TextView tt_sign2;
-    String correo, contra;
+    String correo, contra, nameuser;
 
 
     // Array de Paises en Spinner
@@ -119,6 +119,7 @@ public class RegistrarUsuario extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                nameuser = tt_nombreap.getText().toString()+" "+tt_apellidoap.getText().toString();
                 correo = tt_email.getText().toString();
                 contra = tt_contra.getText().toString();
 
@@ -129,15 +130,14 @@ public class RegistrarUsuario extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 user.sendEmailVerification();
-                                onCreateDialog();
                                 InsertEmail();
-                                clean();
+                                onCreateDialog();
+                                CleanScreen();
 
                             }else{
                                 String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
                                 dameToastdeerror(errorCode);
                             }
-
                         }
                     });
                 }
@@ -145,7 +145,7 @@ public class RegistrarUsuario extends AppCompatActivity {
         });
     }
 
-    private void clean() {
+    private void CleanScreen() {
         tt_nombreap.setText("");
         tt_apellidoap.setText("");
         tt_email.setText("");
@@ -252,6 +252,7 @@ public class RegistrarUsuario extends AppCompatActivity {
     private void InsertEmail() {
 
         GetUID();   // Obtener funcion UID para almacenarlo
+
         String url = RestApiMethod.ApiPostClientUrl;    // URL del RestAPI
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -270,8 +271,8 @@ public class RegistrarUsuario extends AppCompatActivity {
 
                 HashMap<String, String> parametros = new HashMap<String, String>();
                 parametros.put("uid", uid);
-                parametros.put("correo", tt_email.getText().toString());
-                parametros.put("nombre", tt_nombreap.getText().toString()+" "+tt_apellidoap.getText().toString());
+                parametros.put("correo", correo);
+                parametros.put("nombre", nameuser);
                 parametros.put("pais", elemento);
                 return parametros;
             }
@@ -296,8 +297,6 @@ public class RegistrarUsuario extends AppCompatActivity {
             // Create the AlertDialog object and return it
             AlertDialog titulo =builder.create();
             titulo.show();
-
-
     }
 
 }

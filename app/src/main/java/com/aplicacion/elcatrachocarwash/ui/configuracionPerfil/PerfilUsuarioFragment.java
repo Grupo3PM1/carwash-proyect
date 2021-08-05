@@ -67,13 +67,14 @@ public class PerfilUsuarioFragment extends Fragment {
 
         GetUser(); // Cargar Datos del Usuario
 
+        /*
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         ttnombre.setText(currentUser.getDisplayName());
         ttemail.setText(currentUser.getEmail());
         Glide.with(this).load(currentUser.getPhotoUrl()).into(img);
-
+        */
 
         btn_salir.setOnClickListener(new View.OnClickListener() {
             @Override
