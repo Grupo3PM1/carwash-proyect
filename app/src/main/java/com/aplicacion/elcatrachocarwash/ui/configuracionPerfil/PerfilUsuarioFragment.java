@@ -43,9 +43,7 @@ public class PerfilUsuarioFragment extends Fragment {
      private GoogleSignInClient mGoogleSignInClient;
      private GoogleSignInOptions gso;
      private FirebaseAuth mAuth;
-     ImageButton btn_cerrarsesion;
-     String name, email;
-     Uri photoUrl;
+     ImageButton btn_salir;
 
     private String uid; // UID del Usuario
 
@@ -61,26 +59,23 @@ public class PerfilUsuarioFragment extends Fragment {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
 
-        btn_cerrarsesion = (ImageButton)view.findViewById(R.id.btn_cerrarsesion);
         ttnombre = (TextView)view.findViewById(R.id.ttnombre);
         ttpais = (TextView)view.findViewById(R.id.ttpais);
         ttemail = (TextView)view.findViewById(R.id.ttemail);
         img = (ImageView)view.findViewById(R.id.img);
+        btn_salir = (ImageButton)view.findViewById(R.id.btn_salir);
 
         GetUser(); // Cargar Datos del Usuario
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        name = currentUser.getDisplayName();
-        email = currentUser.getEmail();
-        photoUrl = currentUser.getPhotoUrl();
+        ttnombre.setText(currentUser.getDisplayName());
+        ttemail.setText(currentUser.getEmail());
+        Glide.with(this).load(currentUser.getPhotoUrl()).into(img);
 
-        ttnombre.setText(name);
-        ttemail.setText(email);
-        Glide.with(this).load(photoUrl);
 
-        btn_cerrarsesion.setOnClickListener(new View.OnClickListener() {
+        btn_salir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //CERRAR SESION EN FIREBASE

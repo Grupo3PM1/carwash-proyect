@@ -2,8 +2,13 @@ package com.aplicacion.elcatrachocarwash;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -55,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText txtEmail, txtPass;
     AwesomeValidation awesomenValitation;
     Button btn_iniciar;
+    LoginActivity mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -87,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         tt_restablecercontra = (TextView)findViewById(R.id.tt_restablecercontra);
 
 
+
         //-------- INICIO DE EVENTO ONCLICK CON LOS BOTONES --------///
 
         //Crear una cuenta nueva, nos envia al Activity de RegistrarUsuario//
@@ -104,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, ActivityRestablecer.class);
                 startActivity(intent);
+
             }
         });
 
@@ -143,7 +151,8 @@ public class LoginActivity extends AppCompatActivity {
                                     }else{
                                         // si User nos devuelve un valor true significa que el correo esta verificado
                                         // Accede a la aplicacion
-                                        ingresar();
+                                        Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(dashboardActivity);
                                     }
 
                                 }
@@ -313,18 +322,45 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void ingresar() {
+    protected void onStart() {
         FirebaseUser user = mAuth.getCurrentUser();
         if(user!=null){ //si no es null el usuario ya esta logueado
             //mover al usuario al dashboard
-            Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(dashboardActivity);
+            if(user.isEmailVerified()){
+                Intent dashboardActivity = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(dashboardActivity);
+            }
         }
-
+        super.onStart();
     }
 
 
     //-------- MUERTE AL QUE TOQUE ESTOS METODOS--------///
+
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mPresenter.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mPresenter.onPause();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        mPresenter.onDestroy();
+    }
 
 
 
