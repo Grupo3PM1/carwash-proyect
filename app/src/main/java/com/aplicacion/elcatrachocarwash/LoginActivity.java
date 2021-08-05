@@ -333,35 +333,4 @@ public class LoginActivity extends AppCompatActivity {
         }
         super.onStart();
     }
-
-
-    //-------- MUERTE AL QUE TOQUE ESTOS METODOS--------///
-
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        mPresenter.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        mPresenter.onPause();
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        mPresenter.onDestroy();
-    }
-
-
-
 }
