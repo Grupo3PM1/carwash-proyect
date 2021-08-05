@@ -75,7 +75,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
         android:backgroundTint="@color/botones"
-        android:drawableLeft="@android:drawable/ic_menu_myplaces"
+        android:drawableLeft="@drawable/usuario"
         android:drawablePadding="10dp"
         android:ems="10"
         android:fontFamily="sans-serif-light"

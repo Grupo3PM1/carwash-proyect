@@ -105,7 +105,7 @@ public class PerfilUsuarioFragment extends Fragment {
         btn_galeria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Hello toast!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Hello toast!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/");
                 startActivityForResult(intent.createChooser(intent,"Seleccione la aplicacion"),10);
