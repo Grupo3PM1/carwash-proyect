@@ -19,10 +19,11 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         tools:src="@drawable/foto" />
 
     <ImageButton
-        android:id="@+id/imageView8"
+        android:id="@+id/btn_camara"
         android:layout_width="46dp"
         android:layout_height="45dp"
         android:alpha="0.7"
@@ -43,38 +44,61 @@
         app:layout_constraintVertical_bias="0.295"
         tools:ignore="MissingConstraints" />
 
-    <TextView
+
+    <ImageButton
+        android:id="@+id/btn_galeria"
+        android:layout_width="46dp"
+        android:layout_height="45dp"
+        android:alpha="0.7"
+        android:background="@drawable/pantlla"
+        android:padding="10dp"
+        android:paddingStart="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="0dp"
+        android:src="@android:drawable/ic_menu_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.331"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.295"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
         android:id="@+id/ttnombre"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/botones"
+        android:drawableLeft="@drawable/usuario"
+        android:drawablePadding="10dp"
         android:ems="10"
-        android:fontFamily="sans-serif-black"
+        android:fontFamily="sans-serif-light"
         android:hint="Usuario"
         android:inputType="textPersonName"
-        android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:textAlignment="center"
         android:textColor="#FFFFFFFF"
         android:textColorHint="#FFFFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/ttpais"
+        android:textSize="16sp"
+        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/img" />
 
     <EditText
         android:id="@+id/ttpais"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="32dp"
         android:backgroundTint="@color/botones"
         android:drawableLeft="@android:drawable/ic_dialog_map"
@@ -151,6 +175,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/salir" />
+
 
 
 
