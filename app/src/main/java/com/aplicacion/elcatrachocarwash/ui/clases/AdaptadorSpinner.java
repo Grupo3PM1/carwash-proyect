@@ -1,4 +1,4 @@
-package com.aplicacion.elcatrachocarwash.ui.cotizacion;
+package com.aplicacion.elcatrachocarwash.ui.clases;
 
 import android.content.Context;
 import android.graphics.Color;

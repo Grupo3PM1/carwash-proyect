@@ -56,7 +56,6 @@ public class RegistrarUsuario extends AppCompatActivity {
     TextView tt_sign2;
     String correo, contra, nameuser;
 
-
     // Array de Paises en Spinner
     private ArrayList<String> Paises;
     ArrayAdapter adp;
@@ -77,7 +76,6 @@ public class RegistrarUsuario extends AppCompatActivity {
         awesomenValitation.addValidation(this, R.id.tt_email, Patterns.EMAIL_ADDRESS, R.string.invalid_mail);
         awesomenValitation.addValidation(this, R.id.tt_contra, ".{6,}", R.string.invalid_password);
         awesomenValitation.addValidation(this, R.id.tt_confirmar, R.id.tt_contra,R.string.no_coinciden);
-
 
         tt_nombreap = (EditText) findViewById(R.id.tt_nombreap);
         tt_apellidoap = (EditText) findViewById(R.id.tt_apellidoap);

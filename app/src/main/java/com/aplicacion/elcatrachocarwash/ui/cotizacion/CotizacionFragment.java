@@ -15,7 +15,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.aplicacion.elcatrachocarwash.MapsActivity;
 import com.aplicacion.elcatrachocarwash.R;
 import com.aplicacion.elcatrachocarwash.databinding.FragmentCotizacionBinding;
+import com.aplicacion.elcatrachocarwash.ui.clases.AdaptadorSpinner;
 
 import java.util.Calendar;
 
@@ -40,15 +40,15 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
     private Spinner spinner;
     private String[] arraycontenido;
-    private com.aplicacion.elcatrachocarwash.ui.cotizacion.AdaptadorSpinner adapter;
+    private AdaptadorSpinner adapter;
 
     private Spinner spinner1;
     private String[] arraycontenido1;
-    private com.aplicacion.elcatrachocarwash.ui.cotizacion.AdaptadorSpinner adapter1;
+    private AdaptadorSpinner adapter1;
 
     private Spinner spinner2;
     private String[] arraycontenido2;
-    private com.aplicacion.elcatrachocarwash.ui.cotizacion.AdaptadorSpinner adapter2;
+    private AdaptadorSpinner adapter2;
 
     private boolean isFirstTime = true;
 
@@ -60,12 +60,12 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_cotizacion, container, false);
         spinner = (Spinner)view.findViewById(R.id.spvehiculo);
         arraycontenido = new String[]{"Honda-Civic", "KIA-Sorento", "Mazda-CX5", "Mercedes-Vito"};
-        adapter = new com.aplicacion.elcatrachocarwash.ui.cotizacion.AdaptadorSpinner(getActivity(), arraycontenido);
+        adapter = new com.aplicacion.elcatrachocarwash.ui.clases.AdaptadorSpinner(getActivity(), arraycontenido);
         spinner.setAdapter(adapter);
 
         spinner1 = (Spinner)view.findViewById(R.id.spservicio);
         arraycontenido1 = new String[]{"Lavado General", "Lavado Completo", "Lavado de Motor", "Cambio de aceite"};
-        adapter1 = new com.aplicacion.elcatrachocarwash.ui.cotizacion.AdaptadorSpinner(getActivity(), arraycontenido1);
+        adapter1 = new com.aplicacion.elcatrachocarwash.ui.clases.AdaptadorSpinner(getActivity(), arraycontenido1);
         spinner1.setAdapter(adapter1);
         spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -97,7 +97,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
         spinner2 = (Spinner)view.findViewById(R.id.spubicacion);
         arraycontenido2 = new String[]{"Centro de Servicio", "A Domicilio"};
-        adapter2 = new com.aplicacion.elcatrachocarwash.ui.cotizacion.AdaptadorSpinner(getActivity(), arraycontenido2);
+        adapter2 = new com.aplicacion.elcatrachocarwash.ui.clases.AdaptadorSpinner(getActivity(), arraycontenido2);
         spinner2.setAdapter(adapter2);
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

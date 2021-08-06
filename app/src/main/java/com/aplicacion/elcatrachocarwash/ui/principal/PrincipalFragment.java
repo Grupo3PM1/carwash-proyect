@@ -17,7 +17,7 @@ public class PrincipalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Toast.makeText(getContext(), "Hello toast!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Hello toast!", Toast.LENGTH_SHORT).show();
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_principal, container, false);
 
