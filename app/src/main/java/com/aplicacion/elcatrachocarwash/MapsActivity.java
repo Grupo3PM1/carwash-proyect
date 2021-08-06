@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -31,12 +32,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private Marker marcador;
-    double lat = 0.0;
-    double lng = 0.0;
+    double lat=13.310767;
+    double lng=-87.178477;
+    int id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        id  = getIntent().getExtras().getInt("decision");
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -46,6 +52,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getLocalizacion();
+
+
     }
 
     private void getLocalizacion(){
@@ -75,6 +83,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
+
+                if(id==0){
+                    miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
+                }else if (id==1){
+                    miUbicacion = new LatLng(13.310767,-87.178477);
+                }
+
                 mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Ubicacion Actual"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(miUbicacion));
                 CameraPosition cameraPosition = new CameraPosition.Builder()

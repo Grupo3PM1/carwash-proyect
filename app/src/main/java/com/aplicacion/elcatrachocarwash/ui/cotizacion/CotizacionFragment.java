@@ -15,14 +15,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.aplicacion.elcatrachocarwash.MapsActivity;
-import com.aplicacion.elcatrachocarwash.MapsActivity2;
 import com.aplicacion.elcatrachocarwash.R;
 import com.aplicacion.elcatrachocarwash.databinding.FragmentCotizacionBinding;
 
@@ -39,6 +37,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
     Spinner spvehiculo, spservicio, spubicacion;
 
     private int dia, mes, anio, hora, minutos;
+    private int seleccionar;
 
     private Spinner spinner;
     private String[] arraycontenido;
@@ -108,16 +107,24 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
                     isFirstTime = false;
                 }
 
+
                 if (arraycontenido2[position] == "A Domicilio"){
+                    seleccionar=0;
+
                     Intent intent = new Intent(getActivity(), MapsActivity.class);
+                    intent.putExtra("decision", seleccionar);
                     startActivity(intent);
                 }
                 else if(arraycontenido2[position]== "Centro de Servicio"){
-                    Intent intent = new Intent(getActivity(), MapsActivity2.class);
-                    startActivity(intent);
+                    seleccionar=1;
 
+                    Intent intent = new Intent(getActivity(), MapsActivity.class);
+                    intent.putExtra("decision", seleccionar);
+                    startActivity(intent);
                 }
+
             }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -169,7 +176,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
             DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                    txtfecha.setText(dayOfMonth+"/"+(dayOfMonth+1)+"/"+year);
+                    txtfecha.setText(dayOfMonth+"/"+(dayOfMonth+3)+"/"+year);
                 }
             },anio,mes,dia);
             datePickerDialog.show();
