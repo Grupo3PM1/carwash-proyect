@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,6 +14,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +26,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.aplicacion.elcatrachocarwash.LoginActivity;
 import com.aplicacion.elcatrachocarwash.MainActivity;
 import com.aplicacion.elcatrachocarwash.R;
+import com.aplicacion.elcatrachocarwash.RestApiMethod;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -43,8 +50,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class PerfilUsuarioFragment extends Fragment {
 
@@ -54,6 +64,8 @@ public class PerfilUsuarioFragment extends Fragment {
      ImageView img;
      ImageButton btn_salir,btn_galeria,btn_camara;
      Button btn_actualizar;
+     byte [] Foto;
+
 
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -68,7 +80,6 @@ public class PerfilUsuarioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_perfil_usuario, container, false);
-
 
         ttnombre = (TextView)view.findViewById(R.id.ttnombre);
         ttpais = (TextView)view.findViewById(R.id.ttpais);
@@ -122,7 +133,7 @@ public class PerfilUsuarioFragment extends Fragment {
         btn_actualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            actualizarusuario();
+                actualizarPersona();
             }
         });
 
@@ -138,7 +149,9 @@ public class PerfilUsuarioFragment extends Fragment {
         });
 
         return view;
+
     }
+
 
 
 
@@ -257,4 +270,48 @@ public class PerfilUsuarioFragment extends Fragment {
 
     }
 
+
+                        //METODO ACTUALIZAR NOMBRE Y/O FOTOGRAFIA//
+
+
+    private void actualizarPersona() {
+        String url = RestApiMethod.ApiPutUrlClient;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Error en Response", "onResponse: " +  error.getMessage().toString() );
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                HashMap<String, String> parametros = new HashMap<String, String>();
+                parametros.put("uid",uid);
+                parametros.put("nombre",ttnombre.getText().toString());
+                parametros.put("foto",GetStringImage(img));
+                return parametros;
+            }
+
+        };
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(stringRequest);
+    }
+
+    public static String GetStringImage(ImageView img)
+    {
+        Bitmap bitmap = ((BitmapDrawable)img.getDrawable()).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+        byte[] imagebyte = stream.toByteArray();
+        String encode = Base64.encodeToString(imagebyte, Base64.DEFAULT);
+        return encode;
+
+    }
 }
