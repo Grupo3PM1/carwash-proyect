@@ -18,9 +18,9 @@
         tools:layout="@layout/fragment_cotizacion" />
 
     <fragment
-        android:id="@+id/nav_vehiculo"
+        android:id="@+id/nav_registrar_auto"
         android:name="com.aplicacion.elcatrachocarwash.ui.cotizacion.Fragment_Registro_auto"
-        android:label="Perfil de Vehiculo"
+        android:label="Registrar Vehiculo"
         tools:layout="@layout/fragment_registro_vehiculo"/>
 
     <fragment
@@ -42,9 +42,9 @@
         tools:layout="@layout/fragment_perfil_usuario" />
 
     <fragment
-        android:id="@+id/nav_registrar_auto"
+        android:id="@+id/nav_vehiculo"
         android:name="com.aplicacion.elcatrachocarwash.ui.configuracionPerfil.PerfilVehiculoFragment"
-        android:label="Registrar Vehiculo"
+        android:label="Perfil de Vehiculo"
         tools:layout="@layout/fragment_perfil_vehiculo" />
 
 
