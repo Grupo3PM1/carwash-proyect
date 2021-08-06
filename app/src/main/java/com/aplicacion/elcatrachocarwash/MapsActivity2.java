@@ -71,8 +71,9 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Ubicacion Actual"));
+                LatLng miUbicacion = new LatLng(13.310767,-87.178477);
+                //LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(miUbicacion).title("El Catracho CarWash"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(miUbicacion));
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(miUbicacion).zoom(15).bearing(90).tilt(45).build();

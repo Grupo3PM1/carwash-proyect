@@ -28,6 +28,7 @@ import com.aplicacion.elcatrachocarwash.databinding.FragmentCotizacionBinding;
 
 import java.util.Calendar;
 
+
 public class CotizacionFragment extends Fragment implements View.OnClickListener {
 
     private com.aplicacion.elcatrachocarwash.ui.cotizacion.CotizacionViewModel cotizacionViewModel;
@@ -158,6 +159,8 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (v == btnfecha){
+
+
             final Calendar c = Calendar.getInstance();
             dia = c.get(Calendar.DAY_OF_MONTH);
             mes = c.get(Calendar.MONTH);
@@ -165,11 +168,13 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                 @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    txtfecha.setText(dayOfMonth+"/"+(month+1)+"/"+year);
+                public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                    txtfecha.setText(dayOfMonth+"/"+(dayOfMonth+1)+"/"+year);
                 }
-            },dia,mes,anio);
+            },anio,mes,dia);
             datePickerDialog.show();
+
+
         }if (v == btnhora){
             final Calendar c = Calendar.getInstance();
             hora = c.get(Calendar.HOUR_OF_DAY);
@@ -184,4 +189,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
             timePickerDialog.show();
         }
     }
+
+
+
 }
