@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_cotizacion" />
 
     <fragment
+        android:id="@+id/nav_vehiculo"
+        android:name="com.aplicacion.elcatrachocarwash.ui.cotizacion.Fragment_Registro_auto"
+        android:label="Perfil de Vehiculo"
+        tools:layout="@layout/fragment_registro_vehiculo"/>
+
+    <fragment
         android:id="@+id/nav_c_aceite"
         android:name="com.aplicacion.elcatrachocarwash.ui.historial.CambiosAceiteFragment"
         android:label="Cambios De Aceite"
@@ -36,9 +42,9 @@
         tools:layout="@layout/fragment_perfil_usuario" />
 
     <fragment
-        android:id="@+id/nav_vehiculo"
+        android:id="@+id/nav_registrar_auto"
         android:name="com.aplicacion.elcatrachocarwash.ui.configuracionPerfil.PerfilVehiculoFragment"
-        android:label="Perfil Vehiculo"
+        android:label="Registrar Vehiculo"
         tools:layout="@layout/fragment_perfil_vehiculo" />
 
 

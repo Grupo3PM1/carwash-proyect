@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
    <!--<group android:checkableBehavior="single">
@@ -25,9 +26,15 @@
         android:icon="@drawable/fondop">
         <menu>
             <item
+                android:id="@+id/nav_registrar_auto"
+                android:icon="@drawable/outline_directions_car_24"
+                android:title="Registrar vehiculo" />
+
+            <item
                 android:id="@+id/nav_cotizacion"
                 android:icon="@drawable/outline_description_24"
                 android:title="Solicitar Cotizacion" />
+
         </menu>
     </item>
 
@@ -43,7 +50,7 @@
 
             <item
                 android:id="@+id/nav_vehiculo"
-                android:icon="@drawable/outline_directions_car_24"
+                android:icon="@drawable/carro"
                 android:title="Perfil Vehiculo" />
         </menu>
     </item>
@@ -62,16 +69,13 @@
             android:icon="@drawable/outline_local_car_wash_24"
             android:title="Lavados" />
 
-
-        <item
-            android:id="@+id/nav_cerrarsesion"
-            android:icon="@drawable/outline_logout_24"
-            android:title="Cerrar Sesion" />
     </menu>
+
 </item>
 
-
-
-
+            <item
+                android:id="@+id/nav_cerrarsesion"
+                android:icon="@drawable/outline_logout_24"
+                android:title="Cerrar Sesion"/>
 
 </menu>

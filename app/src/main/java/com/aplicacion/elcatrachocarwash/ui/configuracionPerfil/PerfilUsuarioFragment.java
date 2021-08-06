@@ -29,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.aplicacion.elcatrachocarwash.LoginActivity;
+import com.aplicacion.elcatrachocarwash.MainActivity;
 import com.aplicacion.elcatrachocarwash.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -49,8 +50,6 @@ public class PerfilUsuarioFragment extends Fragment {
 
 
      TextView ttnombre, ttemail, ttpais;
-     private GoogleSignInClient mGoogleSignInClient;
-     private GoogleSignInOptions gso;
      private FirebaseAuth mAuth;
      ImageView img;
      ImageButton btn_salir,btn_galeria,btn_camara;
@@ -70,12 +69,6 @@ public class PerfilUsuarioFragment extends Fragment {
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_perfil_usuario, container, false);
 
-
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
 
         ttnombre = (TextView)view.findViewById(R.id.ttnombre);
         ttpais = (TextView)view.findViewById(R.id.ttpais);
@@ -136,24 +129,11 @@ public class PerfilUsuarioFragment extends Fragment {
         btn_salir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //CERRAR SESION EN FIREBASE
+                mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
-
-                //cerrar son google
-                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        //Abrir MainActivity con SigIn button
-                        if(task.isSuccessful()){
-                            Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
-                            startActivity(intent);
-                            PerfilUsuarioFragment.this.getActivity().finish();
-                        }else{
-                            Toast.makeText(getActivity().getApplicationContext(), "No se pudo cerrar sesión con google",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                Intent dashboardActivity = new Intent(getActivity(), LoginActivity.class);
+                startActivity(dashboardActivity);
+                PerfilUsuarioFragment.this.getActivity().finish();
             }
         });
 

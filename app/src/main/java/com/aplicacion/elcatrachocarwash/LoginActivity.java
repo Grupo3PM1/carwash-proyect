@@ -51,30 +51,18 @@ import org.jetbrains.annotations.NotNull;
 public class LoginActivity extends AppCompatActivity {
 
     //VARIABLES GLOBALES//
-    int RC_SIGN_IN = 1;
-    String TAG = "GoogleSignIn";
-    private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
-    ImageButton btn_google;
     TextView tt_sign, tt_restablecercontra;
     EditText txtEmail, txtPass;
     AwesomeValidation awesomenValitation;
     Button btn_iniciar;
-    LoginActivity mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Configuramos el registro con Google
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
 
-        // Creamos el inicio de sesion del usuario con las opciones especificadas por la variable gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         ///Inicializamos Firebase para conectarnos a una instancia existente
         mAuth = FirebaseAuth.getInstance();
@@ -85,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         awesomenValitation.addValidation(this,R.id.txtPass, ".{6,}",R.string.invalid_password);
 
 
-        btn_google = (ImageButton) findViewById(R.id.btn_google);
+
         btn_iniciar = (Button)findViewById(R.id.btn_iniciar);
         txtEmail = (EditText)findViewById(R.id.txtEmail);
         txtPass = (EditText)findViewById(R.id.txtPass);
@@ -105,6 +93,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+
         //Restablecer contraseña, nos envia al Activity de ActivityRestablecer//
         tt_restablecercontra.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,13 +105,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //Acceso con Google, ejecuta el metodo SignIn//
-        btn_google.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-        });
+
 
         //Acceso con Correo Electronico Verificado//
         btn_iniciar.setOnClickListener(new View.OnClickListener() {
@@ -264,62 +248,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-    }
-
-
-    //-------- MUERTE AL QUE TOQUE ESTOS METODOS -------///
-
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //Resultado devuelto al iniciar el Intent de GoogleSignInApi.getSignInIntent (...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            if (task.isSuccessful()) {
-                try {
-                    // Google Sign In was successful, authenticate with Firebase
-                    GoogleSignInAccount account = task.getResult(ApiException.class);
-                    Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                    firebaseAuthWithGoogle(account.getIdToken());
-                } catch (ApiException e) {
-                    // Google Sign In fallido, actualizar GUI
-                    Log.w(TAG, "Google sign in failed", e);
-                }
-            } else {
-                Log.d(TAG, "Error, login no exitoso:" + task.getException().toString());
-                Toast.makeText(this, "Ocurrio un error. " + task.getException().toString(),
-                        Toast.LENGTH_LONG).show();
-            }
-        }
-
-    }
-
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                                //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
-                            Intent manActivity = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(manActivity);
-                            LoginActivity.this.finish();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-
-                        }
-                    }
-                });
     }
 
     protected void onStart() {

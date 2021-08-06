@@ -1,11 +1,8 @@
 package com.aplicacion.elcatrachocarwash.ui.configuracionPerfil;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +40,7 @@ public class PerfilVehiculoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_perfil_vehiculo, container, false);
+        View view = inflater.inflate(R.layout.fragment_registro_vehiculo, container, false);
 
         http = new AsyncHttpClient();
 
