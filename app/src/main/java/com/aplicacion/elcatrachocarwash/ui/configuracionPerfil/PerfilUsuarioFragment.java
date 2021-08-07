@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -153,9 +154,6 @@ public class PerfilUsuarioFragment extends Fragment {
     }
 
 
-
-
-
     private void actualizarusuario() {
 
 
@@ -190,6 +188,13 @@ public class PerfilUsuarioFragment extends Fragment {
                         ttnombre.setText(jsonObject.getString("clnt_nombre"));
                         ttpais.setText(jsonObject.getString("clnt_pais"));
                         ttemail.setText(jsonObject.getString("clnt_email"));
+                        //Traemos foto tipo Blob de BD como String Base64 y decodificamos a ByteArray
+                        byte[] decodedString = Base64.decode(jsonObject.getString("clnt_foto"), 0);
+                        //de ByteArray lo convertimos a Bitmap
+                        Bitmap bitmapfotoBD = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        //Seteamos dicho Bitmap en el ImageView
+                        img.setImageBitmap(bitmapfotoBD);
+
                     } catch (JSONException e) {
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -278,8 +283,7 @@ public class PerfilUsuarioFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), URL, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), uid, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), GetStringImage(img), Toast.LENGTH_SHORT).show();
                 Toast.makeText(getContext(), ttnombre.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
@@ -293,6 +297,7 @@ public class PerfilUsuarioFragment extends Fragment {
                 Map<String,String> parametros=new HashMap<String,String>();
                 parametros.put("uid",uid);
                 parametros.put("nombre",ttnombre.getText().toString());
+                parametros.put("foto",GetStringImage(img));
                 return parametros;
             }
         };
@@ -302,46 +307,22 @@ public class PerfilUsuarioFragment extends Fragment {
     //FIN METODO ACTUALIZAR NOMBRE Y/O FOTOGRAFIA//
 
 
-    /*
-    private void actualizarPersona() {
-        String url = RestApiMethod.ApiPutUrlClient;
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("Error en Response", "onResponse: " +  error.getMessage().toString() );
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                HashMap<String, String> parametros = new HashMap<String, String>();
-                parametros.put("uid",uid);
-                parametros.put("nombre",ttnombre.getText().toString());
-                //parametros.put("foto",GetStringImage(img));
-                return parametros;
-            }
-
-        };
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        queue.add(stringRequest);
-    }
-
-     */
-
     public static String GetStringImage(ImageView img)
     {
-        Bitmap bitmap = ((BitmapDrawable)img.getDrawable()).getBitmap();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
+        //Traemos la Imagen del Imageview y construimos su dibujo cache
+        img.buildDrawingCache();
+        //Extraemos ese dibujo cache y lo guardamos en un Bitmap
+        Bitmap bitmap = img.getDrawingCache();
+        //Iniciamos una Salida de Stream para ByteArray
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        //Comprimimos dicho Bitmap en el Stream para ByteArray como JPEG
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        //Guardamos ese Strean para ByteArray en un propio ByteArray
         byte[] imagebyte = stream.toByteArray();
+        //Creamos un String donde codificamos el ByteArray a Base64
         String encode = Base64.encodeToString(imagebyte, Base64.DEFAULT);
+        //Retornamos dicho String con Base64 del ByteArray
         return encode;
 
     }
