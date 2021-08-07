@@ -188,15 +188,12 @@ public class PerfilUsuarioFragment extends Fragment {
                         ttnombre.setText(jsonObject.getString("clnt_nombre"));
                         ttpais.setText(jsonObject.getString("clnt_pais"));
                         ttemail.setText(jsonObject.getString("clnt_email"));
-                        if(jsonObject.getString("clnt_foto")==""){}
-                        else{
-                            //Traemos foto tipo Blob de BD como String Base64 y decodificamos a ByteArray
-                            byte[] decodedString = Base64.decode(jsonObject.getString("clnt_foto"), 0);
-                            //de ByteArray lo convertimos a Bitmap
-                            Bitmap bitmapfotoBD = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            //Seteamos dicho Bitmap en el ImageView
-                            img.setImageBitmap(bitmapfotoBD);
-                        }
+                        //Traemos foto tipo Blob de BD como String Base64 y decodificamos a ByteArray
+                        byte[] decodedString = Base64.decode(jsonObject.getString("clnt_foto"), 0);
+                        //de ByteArray lo convertimos a Bitmap
+                        Bitmap bitmapfotoBD = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        //Seteamos dicho Bitmap en el ImageView
+                        img.setImageBitmap(bitmapfotoBD);
 
                     } catch (JSONException e) {
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
