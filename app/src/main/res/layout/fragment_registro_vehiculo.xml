@@ -7,32 +7,19 @@
     android:background="@drawable/pantalla_user"
     tools:context=".ui.cotizacion.Fragment_Registro_auto">
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:fontFamily="sans-serif"
-        android:text="VEHÍCULO"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="117dp"
         android:layout_height="120dp"
         android:layout_gravity="top|center_horizontal"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/button_social"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView1"
-        app:srcCompat="@drawable/outline_directions_car_24" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/outline_directions_car_24"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/txt2"

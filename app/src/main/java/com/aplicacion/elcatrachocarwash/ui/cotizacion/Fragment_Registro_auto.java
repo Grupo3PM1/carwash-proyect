@@ -1,14 +1,10 @@
 package com.aplicacion.elcatrachocarwash.ui.cotizacion;
 
-import android.app.FragmentManager;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +25,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.aplicacion.elcatrachocarwash.R;
 import com.aplicacion.elcatrachocarwash.RestApiMethod;
-import com.aplicacion.elcatrachocarwash.ui.clases.Aceites;
-import com.aplicacion.elcatrachocarwash.ui.clases.Modelos;
+import com.aplicacion.elcatrachocarwash.ui.clases.Spinners;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.loopj.android.http.AsyncHttpClient;
@@ -56,11 +51,11 @@ public class Fragment_Registro_auto extends Fragment {
 
     private String idUser;          // ID del Usuario en MySQL
 
-    // Variables de elementos Spinner
+    // Variables de elementos Spinner de Registro de Vehículo
     private Spinner sp_marca, sp_aceite, sp_anio;
     private String ItemMarcaModelo, ItemAnio, ItemTAceite;
 
-    // Variables de Botones y eventos
+    // Variables de Botones y eventos de Registro de Vehículo
     private Button btn_guardar;
 
 
@@ -89,7 +84,6 @@ public class Fragment_Registro_auto extends Fragment {
             @Override
             public void onClick(View v) {
                 InsertVehicle();    // Insertar en MySQL datos de Vehiculo del Usuario
-                CleanScreen();
             }
         });
 
@@ -118,16 +112,16 @@ public class Fragment_Registro_auto extends Fragment {
     }
 
     private void ListaModelos(String URL){
-        ArrayList<Modelos> lista = new ArrayList<Modelos>();
+        ArrayList<Spinners> lista = new ArrayList<Spinners>();
         try {
             JSONArray jsonArreglo = new JSONArray(URL);
             for(int i=0; i<jsonArreglo.length(); i++){
-                Modelos m = new Modelos();
+                Spinners m = new Spinners();
                 m.setNombre(jsonArreglo.getJSONObject(i).getString("nombre"));
                 lista.add(m);
             }
 
-            ArrayAdapter<Modelos> adp = new ArrayAdapter<Modelos>(getActivity(), android.R.layout.simple_spinner_dropdown_item, lista);
+            ArrayAdapter<Spinners> adp = new ArrayAdapter<Spinners>(getActivity(), android.R.layout.simple_spinner_dropdown_item, lista);
             sp_marca.setAdapter(adp);
 
             sp_marca.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -199,16 +193,16 @@ public class Fragment_Registro_auto extends Fragment {
     }
 
     private void ListaAceites(String URL){
-        ArrayList<Aceites> lista = new ArrayList<Aceites>();
+        ArrayList<Spinners> lista = new ArrayList<Spinners>();
         try {
             JSONArray jsonArreglo = new JSONArray(URL);
             for(int i=0; i<jsonArreglo.length(); i++){
-                Aceites a = new Aceites();
+                Spinners a = new Spinners();
                 a.setNombre(jsonArreglo.getJSONObject(i).getString("tpact_nombre"));
                 lista.add(a);
             }
 
-            ArrayAdapter<Aceites> adp = new ArrayAdapter<Aceites>(getActivity(), android.R.layout.simple_spinner_dropdown_item, lista);
+            ArrayAdapter<Spinners> adp = new ArrayAdapter<Spinners>(getActivity(), android.R.layout.simple_spinner_dropdown_item, lista);
             sp_aceite.setAdapter(adp);
 
             sp_aceite.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

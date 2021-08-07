@@ -86,11 +86,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if(id==0){
                     miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Ubicacion Actual"));
                 }else if (id==1){
                     miUbicacion = new LatLng(13.310767,-87.178477);
+                    mMap.addMarker(new MarkerOptions().position(miUbicacion).title("El Catracho Carwash"));
                 }
 
-                mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Ubicacion Actual"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(miUbicacion));
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(miUbicacion).zoom(15).bearing(90).tilt(45).build();

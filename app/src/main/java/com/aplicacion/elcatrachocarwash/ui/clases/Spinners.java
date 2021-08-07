@@ -1,13 +1,13 @@
 package com.aplicacion.elcatrachocarwash.ui.clases;
 
-public class Aceites {
+public class Spinners {
 
     private Integer id;
     private String nombre;
 
-    public Aceites() {}
+    public Spinners() {}
 
-    public Aceites(Integer id, String nombre) {
+    public Spinners(Integer id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
