@@ -272,8 +272,37 @@ public class PerfilUsuarioFragment extends Fragment {
 
 
                         //METODO ACTUALIZAR NOMBRE Y/O FOTOGRAFIA//
+    private void actualizarPersona(){
+        String URL = RestApiMethod.ApiPutUrlClient;
+        StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), URL, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), uid, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), ttnombre.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> parametros=new HashMap<String,String>();
+                parametros.put("uid",uid);
+                parametros.put("nombre",ttnombre.getText().toString());
+                return parametros;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(stringRequest);
+    }
+    //FIN METODO ACTUALIZAR NOMBRE Y/O FOTOGRAFIA//
 
 
+    /*
     private void actualizarPersona() {
         String url = RestApiMethod.ApiPutUrlClient;
 
@@ -294,7 +323,7 @@ public class PerfilUsuarioFragment extends Fragment {
                 HashMap<String, String> parametros = new HashMap<String, String>();
                 parametros.put("uid",uid);
                 parametros.put("nombre",ttnombre.getText().toString());
-                parametros.put("foto",GetStringImage(img));
+                //parametros.put("foto",GetStringImage(img));
                 return parametros;
             }
 
@@ -302,6 +331,8 @@ public class PerfilUsuarioFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(stringRequest);
     }
+
+     */
 
     public static String GetStringImage(ImageView img)
     {
