@@ -43,12 +43,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import cz.msebera.android.httpclient.Header;
 
 
 public class CotizacionFragment extends Fragment implements View.OnClickListener {
+
 
     private com.aplicacion.elcatrachocarwash.ui.cotizacion.CotizacionViewModel cotizacionViewModel;
     private FragmentCotizacionBinding binding;
@@ -73,12 +75,14 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
     private int seleccionar;
 
     private String[] arraycontenido2;
-    private com.aplicacion.elcatrachocarwash.ui.clases.AdaptadorSpinner adapter2;
 
+    private ArrayAdapter adapter2;
     private boolean isFirstTime = true;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-            ViewGroup container, Bundle savedInstanceState) {
+
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
         cotizacionViewModel =
                 new ViewModelProvider(this).get(com.aplicacion.elcatrachocarwash.ui.cotizacion.CotizacionViewModel.class);
 
@@ -98,11 +102,15 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         btnfecha.setOnClickListener(this);
         btnhora.setOnClickListener(this);
 
+
+        txtfecha.setEnabled(false);
+        txthora.setEnabled(false);
+
         GetUser();
 
-         final int interval = 1000; // 1 Second
-         Handler handler = new Handler();
-         Runnable runnable = new Runnable(){
+        final int interval = 2000; // 1 Second
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable(){
             public void run() {
                 ObtenerVehiculos();
                 ObtenerServicios();
@@ -112,9 +120,13 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         handler.postAtTime(runnable, System.currentTimeMillis() + interval);
         handler.postDelayed(runnable, interval);
 
+
+
+        //        SELECION DEL TIPO DE SERVICIO             //
         spubicacion = (Spinner)view.findViewById(R.id.spubicacion);
         arraycontenido2 = new String[]{"Seleccione","Centro de Servicio", "A Domicilio"};
-        adapter2 = new com.aplicacion.elcatrachocarwash.ui.clases.AdaptadorSpinner(getActivity(), arraycontenido2);
+        ArrayList<String> ubicacion = new ArrayList<>(Arrays.asList(arraycontenido2));
+        adapter2 = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, ubicacion);
         spubicacion.setAdapter(adapter2);
         spubicacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -122,7 +134,6 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
                 if (isFirstTime){
                     isFirstTime = false;
                 }
-
 
                 if (arraycontenido2[position] == "A Domicilio"){
                     seleccionar=0;
@@ -141,11 +152,14 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
             }
 
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
+
+        //        FIN DE SELECION DEL TIPO DE SERVICIO             //
 
         return view;
     }
@@ -294,11 +308,18 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
+                                        spubicacion.setSelection(adapter2.getPosition("Centro de Servicio"));
+                                        spubicacion.setEnabled(false);
                                     }
                                 });
                         AlertDialog titulo = alerta.create();
                         titulo.setTitle("Aviso");
                         titulo.show();
+
+                    }
+                    else{
+                        spubicacion.setEnabled(true);
+
                     }
                 }
 
@@ -320,9 +341,10 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         super.onDestroyView();
         binding = null;
     }
-
+    //--------         SELECCION DE FECHA Y HORA        --------//
     @Override
     public void onClick(View v) {
+
         if (v == btnfecha){
 
 
@@ -334,7 +356,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
             DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                    txtfecha.setText(dayOfMonth+"/"+(dayOfMonth+3)+"/"+year);
+                    txtfecha.setText(dayOfMonth+"/"+(dayOfMonth+1)+"/"+year);
                 }
             },anio,mes,dia);
             datePickerDialog.show();
@@ -354,7 +376,5 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
             timePickerDialog.show();
         }
     }
-
-
-
+    //--------         FIN DE SELECCION DE FECHA Y HORA        --------///
 }

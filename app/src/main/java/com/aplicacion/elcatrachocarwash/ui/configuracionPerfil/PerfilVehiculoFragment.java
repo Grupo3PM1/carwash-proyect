@@ -64,7 +64,7 @@ public class PerfilVehiculoFragment extends Fragment {
 
         GetUser();
 
-        final int interval = 1000; // 1 Second
+        final int interval = 1500; // 1 Second
         Handler handler = new Handler();
         Runnable runnable = new Runnable(){
             public void run() {
