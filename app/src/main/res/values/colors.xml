@@ -15,4 +15,6 @@
     <color name="fondoRestablecer">#E9E4F0</color>
     <color name="camara">#A5A4A5</color>
     <color name="actualizar">#B7950B</color>
+    <color name="pressed_color">#4D90FE</color>
+    <color name="default_color">#D2B4DE</color>
 </resources>
