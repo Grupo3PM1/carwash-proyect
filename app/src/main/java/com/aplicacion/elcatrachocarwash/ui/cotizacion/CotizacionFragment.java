@@ -172,18 +172,17 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
                         if (arraycontenido2[position] == "A Domicilio") {
                             seleccionar = 0;
 
-                            /*Toast.makeText(getContext(),"Latitud es "+Latitud, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getActivity(), MapsActivity.class);
                             intent.putExtra("decision", seleccionar);
-                            startActivity(intent);*/
+                            startActivity(intent);
 
 
                     } else if (arraycontenido2[position] == "Centro de Servicio") {
                         seleccionar = 1;
 
-                        /*Intent intent = new Intent(getActivity(), MapsActivity.class);
+                        Intent intent = new Intent(getActivity(), MapsActivity.class);
                         intent.putExtra("decision", seleccionar);
-                        startActivity(intent);*/
+                        startActivity(intent);
                     }
                     ItemUbiacion = (String) spubicacion.getAdapter().getItem(position).toString();   // El elemento seleccionado del Spinner
 
