@@ -18,6 +18,40 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtnumero"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/firma"
+                    android:text="Numero"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/Barra"
+                    android:textSize="24sp" />
+
+                <Space
+                    android:layout_width="217dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/txtEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/txtvehiculo"
+                    android:layout_weight="1"
+                    android:text="Estado"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/txtvehiculo"
                 android:layout_width="match_parent"
@@ -25,13 +59,13 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/firma"
-                android:text="-Vehiculo-"
+                android:text="Vehiculo"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="5dp" />
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/txtservicio"
@@ -40,7 +74,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/txtvehiculo"
-                android:text="-Servicio-"
+                android:text="Servicio"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="20sp" />
 
@@ -60,12 +94,12 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/txtvehiculo"
-                    android:text="-TipoUbicacion-"
+                    android:text="TipoUbicacion"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="18sp" />
 
                 <Space
-                    android:layout_width="10dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <TextView
@@ -75,24 +109,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/txtvehiculo"
-                    android:text="-FechaEmision-"
+                    android:text="FechaEmision"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="18sp" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/txtEstado"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/txtvehiculo"
-                android:layout_weight="1"
-                android:text="-Estado-"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="18sp" />
-
         </LinearLayout>
 
     </LinearLayout>
