@@ -151,7 +151,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                guardarCotizacion();
+                //guardarCotizacion();
             }
         });
 
