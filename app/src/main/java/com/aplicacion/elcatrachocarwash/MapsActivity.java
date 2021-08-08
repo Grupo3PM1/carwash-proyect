@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import com.aplicacion.elcatrachocarwash.ui.cotizacion.CotizacionFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,8 +33,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private Marker marcador;
-    double lat=13.310767;
-    double lng=-87.178477;
+    private Double lat, lng;
     int id;
 
 
@@ -52,7 +52,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getLocalizacion();
-
 
     }
 
@@ -84,18 +83,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onLocationChanged(@NonNull Location location) {
                 LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
 
+                //Intent i = new Intent(getApplicationContext(), CotizacionFragment.class);
+
                 if(id==0){
                     miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Ubicacion Actual"));
+
+                    //i.putExtra("latitud",location.getLatitude());
+                    //i.putExtra("longitud", location.getLongitude());
+
                 }else if (id==1){
                     miUbicacion = new LatLng(13.310767,-87.178477);
                     mMap.addMarker(new MarkerOptions().position(miUbicacion).title("El Catracho Carwash"));
-                }
 
+                    //i.putExtra("latitud", 13.310767);
+                    //i.putExtra("longitud", -87.178477);
+
+                }
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(miUbicacion));
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(miUbicacion).zoom(15).bearing(90).tilt(45).build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                //startActivity(i);
             }
 
             @Override
