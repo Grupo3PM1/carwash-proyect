@@ -56,6 +56,7 @@ public class PerfilVehiculoFragment extends Fragment {
     private String[] iddevehiculo= new String[900];
     private ArrayList<Spinners> lista;
     private String Id_Vehiculo, IdVehiculoBD;
+    private Boolean SelectedRow = false;
 
     ArrayAdapter<Spinners> adp;
     ArrayList ArrayLista;
@@ -80,7 +81,13 @@ public class PerfilVehiculoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getContext(), "El Id Seleccionado es: "+IdVehiculoBD, Toast.LENGTH_SHORT).show();
-                eliminarVehiculo();
+                if(SelectedRow==false){
+                    Toast.makeText(getContext(), "Seleccione un Vehiculo para elimnar", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    eliminarVehiculo();
+                }
+
             }
         });
 
@@ -97,6 +104,7 @@ public class PerfilVehiculoFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         view.setSelected(true);
                         //Id_Vehiculo = String.valueOf(position);
+                        SelectedRow = true;
                         IdVehiculoBD = iddevehiculo[position];
                         //Toast.makeText(getContext(), "Id De este es: "+IdVehiculoBD, Toast.LENGTH_SHORT).show();
 
