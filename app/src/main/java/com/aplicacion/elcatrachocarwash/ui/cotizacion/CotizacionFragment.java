@@ -1,12 +1,23 @@
 package com.aplicacion.elcatrachocarwash.ui.cotizacion;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +31,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -33,6 +45,7 @@ import com.aplicacion.elcatrachocarwash.R;
 import com.aplicacion.elcatrachocarwash.RestApiMethod;
 import com.aplicacion.elcatrachocarwash.databinding.FragmentCotizacionBinding;
 import com.aplicacion.elcatrachocarwash.ui.clases.Spinners;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.loopj.android.http.AsyncHttpClient;
@@ -42,9 +55,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -78,15 +94,20 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
     private ArrayAdapter adapter2;
     private boolean isFirstTime = true;
+    View view;
 
+     String Latitud,Longitud;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        Intent intent = getActivity().getIntent();
+        Latitud  = getActivity().getIntent().getExtras().getString("latitud");
+        Longitud  = getActivity().getIntent().getExtras().getString("longitud");
 
         cotizacionViewModel =
                 new ViewModelProvider(this).get(com.aplicacion.elcatrachocarwash.ui.cotizacion.CotizacionViewModel.class);
 
-        View view = inflater.inflate(R.layout.fragment_cotizacion, container, false);
+        view = inflater.inflate(R.layout.fragment_cotizacion, container, false);
 
         http = new AsyncHttpClient();
 
@@ -101,7 +122,6 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
         btnfecha.setOnClickListener(this);
         btnhora.setOnClickListener(this);
-
 
         txtfecha.setEnabled(false);
         txthora.setEnabled(false);
@@ -132,23 +152,25 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (isFirstTime){
-                    isFirstTime = false;
+                    isFirstTime = true;
                 }
+                        if (arraycontenido2[position] == "A Domicilio") {
+                            seleccionar = 0;
 
-                if (arraycontenido2[position] == "A Domicilio"){
-                    seleccionar=0;
+                            Toast.makeText(getContext(),"Latitud es "+Latitud, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getActivity(), MapsActivity.class);
+                            intent.putExtra("decision", seleccionar);
+                            startActivity(intent);
 
-                    Intent intent = new Intent(getActivity(), MapsActivity.class);
-                    intent.putExtra("decision", seleccionar);
-                    startActivity(intent);
-                }
-                else if(arraycontenido2[position]== "Centro de Servicio"){
-                    seleccionar=1;
 
-                    Intent intent = new Intent(getActivity(), MapsActivity.class);
-                    intent.putExtra("decision", seleccionar);
-                    startActivity(intent);
-                }
+                    } else if (arraycontenido2[position] == "Centro de Servicio") {
+                        seleccionar = 1;
+
+                        Intent intent = new Intent(getActivity(), MapsActivity.class);
+                        intent.putExtra("decision", seleccionar);
+                        startActivity(intent);
+                    }
+
 
             }
 
@@ -162,6 +184,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         //        FIN DE SELECION DEL TIPO DE SERVICIO             //
 
         return view;
+
     }
 
     //-------- INICIO DE EVENTO DE BUSCAR ID DE USUARIO --------///
@@ -377,4 +400,86 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         }
     }
     //--------         FIN DE SELECCION DE FECHA Y HORA        --------///
+
+
+
+
+    //--------         LATITUD Y LONGITUD       --------///
+
+    public void Permisos(){
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+            locationStart();
+        }
+    }
+
+    private void locationStart() {
+        LocationManager mlocManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Localizacion Local = new Localizacion();
+        Local.setCotizacionFragment(this);
+        final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!gpsEnabled) {
+            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settingsIntent);
+        }
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+            return;
+        }
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
+
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1000) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationStart();
+                return;
+            }
+        }
+    }
+
+    public void setLocation(Location loc) {
+        //Obtener la direccion de la calle a partir de la latitud y la longitud
+        if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
+            try {
+                Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                List<Address> list = geocoder.getFromLocation(
+                        loc.getLatitude(), loc.getLongitude(), 1);
+                if (!list.isEmpty()) {
+                    Address DirCalle = list.get(0);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class Localizacion implements LocationListener {
+        CotizacionFragment cotizacionFragment;
+
+        public CotizacionFragment getCotizacionFragment() {
+            return cotizacionFragment;
+        }
+
+        public void setCotizacionFragment(CotizacionFragment cotizacionFragment) {
+            this.cotizacionFragment = cotizacionFragment;
+        }
+
+        @Override
+        public void onLocationChanged(Location loc) {
+
+            loc.getLatitude();
+            loc.getLongitude();
+
+            Latitud =  ""+loc.getLatitude();
+            Longitud =  ""+loc.getLongitude();
+            this.cotizacionFragment.setLocation(loc);
+
+        }
+    }
 }
