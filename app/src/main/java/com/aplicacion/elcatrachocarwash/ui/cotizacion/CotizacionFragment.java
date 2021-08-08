@@ -17,6 +17,7 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,6 +104,8 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
      String Latitud,Longitud;
 
+    boolean retorno;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         /*Intent intent = getActivity().getIntent();
@@ -129,10 +132,8 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         btnfecha.setOnClickListener(this);
         btnhora.setOnClickListener(this);
 
-        txtfecha.setEnabled(false);
-        txthora.setEnabled(false);
-
-
+        txtfecha.setInputType(InputType.TYPE_NULL);
+        txthora.setInputType(InputType.TYPE_NULL);
 
         GetUser();
 
@@ -151,7 +152,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                validar();
                 guardarCotizacion();
             }
         });
@@ -501,20 +502,24 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
 
 
-    //METODO GUARDAR COTIZACION//
+              //                     METODO GUARDAR COTIZACION                      //
+
     private void guardarCotizacion(){
         String URL = RestApiMethod.ApiPostCotizacionUrl;
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                String FechaHora= txtfecha.getText().toString()+" "+txthora.getText().toString()+":00";
-                Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), FechaHora, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
+                //String FechaHora= txtfecha.getText().toString()+" "+txthora.getText().toString()+":00";
+                //Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), FechaHora, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+
             }
         }){
             @Override
@@ -530,12 +535,33 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
                 parametros.put("longit", "-87.178477");
                 parametros.put("idclnt",idUser);
                 return parametros;
+
             }
         };
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(stringRequest);
-    }
-    //FIN METODO GUARDAR COTIZACION//
 
+    }
+                  //           FIN METODO GUARDAR COTIZACION             //
+
+
+                 //             COMIENZO  DE  VALIDACION                    //
+
+
+    public boolean validar(){
+        retorno= true;
+        String fecha= txtfecha.getText().toString();
+        String hora= txthora.getText().toString();
+
+        if(fecha.isEmpty()){
+            txtfecha.setError("DEBE SELECCIONAR UNA FECHA");
+            retorno = false;
+        }
+        if(hora.isEmpty()){
+            txthora.setError("DEBE SELECCIONAR UNA HORA");
+            retorno = false;
+        }
+        return retorno;
+    }
 
 }
