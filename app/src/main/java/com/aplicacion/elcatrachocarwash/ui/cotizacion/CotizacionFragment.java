@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -85,6 +86,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
     Button btnfecha, btnhora, btncotizacion;
     EditText txtfecha, txthora;
+    TextView text_home3;
 
     // Variables de elementos Spinner de Registro de Vehículo
     private Spinner spvehiculo, spservicio, spubicacion;
@@ -127,6 +129,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         btnhora = (Button)view.findViewById(R.id.btnhora);
         txtfecha = (EditText)view.findViewById(R.id.txtfecha);
         txthora = (EditText)view.findViewById(R.id.txthora);
+        text_home3 = (TextView) view.findViewById(R.id.text_home3);
         btn_guardar = (Button)view.findViewById(R.id.btncotizacion);
 
         btnfecha.setOnClickListener(this);
@@ -153,7 +156,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
             @Override
             public void onClick(View v) {
                 validar();
-                guardarCotizacion();
+
             }
         });
 
@@ -509,11 +512,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
-                //String FechaHora= txtfecha.getText().toString()+" "+txthora.getText().toString()+":00";
-                //Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getContext(), FechaHora, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -553,13 +552,29 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         String fecha= txtfecha.getText().toString();
         String hora= txthora.getText().toString();
 
-        if(fecha.isEmpty()){
+        if(ItemUbiacion=="Seleccione"){
+            text_home3.setError("DEBE SELECCIONAR UNA UBICACION");
+            txthora.setError(null);
+            txtfecha.setError(null);
+        }
+        else if(fecha.isEmpty()){
             txtfecha.setError("DEBE SELECCIONAR UNA FECHA");
+            text_home3.setError(null);
+            txthora.setError(null);
             retorno = false;
         }
-        if(hora.isEmpty()){
+        else if(hora.isEmpty()){
             txthora.setError("DEBE SELECCIONAR UNA HORA");
+            text_home3.setError(null);
+            txtfecha.setError(null);
             retorno = false;
+        }
+        else
+        {
+            text_home3.setError(null);
+            txthora.setError(null);
+            txtfecha.setError(null);
+            guardarCotizacion();
         }
         return retorno;
     }
