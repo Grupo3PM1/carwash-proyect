@@ -35,10 +35,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.aplicacion.elcatrachocarwash.MapsActivity;
 import com.aplicacion.elcatrachocarwash.R;
@@ -59,8 +62,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -100,9 +105,10 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Intent intent = getActivity().getIntent();
+        /*Intent intent = getActivity().getIntent();
         Latitud  = getActivity().getIntent().getExtras().getString("latitud");
         Longitud  = getActivity().getIntent().getExtras().getString("longitud");
+         */
 
         cotizacionViewModel =
                 new ViewModelProvider(this).get(com.aplicacion.elcatrachocarwash.ui.cotizacion.CotizacionViewModel.class);
@@ -126,6 +132,8 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         txtfecha.setEnabled(false);
         txthora.setEnabled(false);
 
+
+
         GetUser();
 
         final int interval = 2000; // 1 Second
@@ -140,6 +148,12 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         handler.postAtTime(runnable, System.currentTimeMillis() + interval);
         handler.postDelayed(runnable, interval);
 
+        btn_guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guardarCotizacion();
+            }
+        });
 
 
         //        SELECION DEL TIPO DE SERVICIO             //
@@ -157,7 +171,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
                         if (arraycontenido2[position] == "A Domicilio") {
                             seleccionar = 0;
 
-                            Toast.makeText(getContext(),"Latitud es "+Latitud, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(),"Latitud es "+Latitud, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getActivity(), MapsActivity.class);
                             intent.putExtra("decision", seleccionar);
                             startActivity(intent);
@@ -404,6 +418,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
 
 
+
     //--------         LATITUD Y LONGITUD       --------///
 
     public void Permisos(){
@@ -482,4 +497,37 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
         }
     }
+
+    /*
+    //METODO GUARDAR COTIZACION//
+    private void guardarCotizacion(){
+        String URL = RestApiMethod.ApiPutUrlClient;
+        StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), GetStringImage(img), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), ttnombre.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> parametros=new HashMap<String,String>();
+                parametros.put("uid",uid);
+                parametros.put("nombre",ttnombre.getText().toString());
+                parametros.put("foto",GetStringImage(img));
+                return parametros;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(stringRequest);
+    }
+    //FIN METODO GUARDAR COTIZACION//
+
+     */
 }
