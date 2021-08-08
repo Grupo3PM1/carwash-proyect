@@ -275,7 +275,7 @@ public class Fragment_Registro_auto extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                Toast.makeText(getActivity(), "Operacion Exitosa", Toast.LENGTH_LONG).show();
             }
         }, new Response.ErrorListener() {
             @Override
