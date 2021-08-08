@@ -1,16 +1,22 @@
 package com.aplicacion.elcatrachocarwash.ui.configuracionPerfil;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -56,6 +62,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 public class PerfilUsuarioFragment extends Fragment {
 
@@ -63,7 +70,7 @@ public class PerfilUsuarioFragment extends Fragment {
      TextView ttnombre, ttemail, ttpais;
      private FirebaseAuth mAuth;
      ImageView img;
-     ImageButton btn_salir,btn_galeria,btn_camara;
+     ImageButton btn_galeria,btn_camara;
      Button btn_actualizar;
      byte [] Foto;
 
@@ -86,7 +93,6 @@ public class PerfilUsuarioFragment extends Fragment {
         ttpais = (TextView)view.findViewById(R.id.ttpais);
         ttemail = (TextView)view.findViewById(R.id.ttemail);
         img = (ImageView)view.findViewById(R.id.img);
-        btn_salir = (ImageButton)view.findViewById(R.id.btn_salir);
         btn_galeria = (ImageButton)view.findViewById(R.id.btn_galeria);
         btn_camara = (ImageButton)view.findViewById(R.id.btn_camara);
         btn_actualizar = (Button)view.findViewById(R.id.btn_actualizar);
@@ -135,19 +141,10 @@ public class PerfilUsuarioFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 actualizarPersona();
+                //createNotification();
             }
         });
 
-        btn_salir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth = FirebaseAuth.getInstance();
-                mAuth.signOut();
-                Intent dashboardActivity = new Intent(getActivity(), LoginActivity.class);
-                startActivity(dashboardActivity);
-                PerfilUsuarioFragment.this.getActivity().finish();
-            }
-        });
 
         return view;
 
@@ -325,5 +322,36 @@ public class PerfilUsuarioFragment extends Fragment {
         //Retornamos dicho String con Base64 del ByteArray
         return encode;
 
+    }
+
+    private void createNotification(){
+        String id="mensaje";
+        NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(),id);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(id, "nuevo", NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setShowBadge(true);
+            assert notificationManager != null;
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        builder.setAutoCancel(true).setWhen(System.currentTimeMillis())
+                .setContentTitle("Cotizacion Aprobada").setSmallIcon(R.drawable.carwash_redondo)
+                .setContentText("Su cotizacion ha sido aprobada con éxito.")
+                .setColor(Color.BLUE)
+                .setContentIntent(sendNotification())
+                .setContentInfo("nuevo");
+        Random random = new Random();
+        int id_notification = random.nextInt(8000);
+
+        assert notificationManager != null;
+        notificationManager.notify(id_notification,builder.build());
+    }
+
+    public PendingIntent sendNotification(){
+        Intent intent = new Intent(getActivity().getApplicationContext(),MainActivity.class);
+        intent.putExtra("color", "rojo");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return PendingIntent.getActivity(getActivity(),0,intent,0);
     }
 }

@@ -158,25 +158,5 @@
         app:layout_constraintTop_toBottomOf="@+id/ttemail"
         app:layout_constraintVertical_bias="0.39" />
 
-    <ImageButton
-        android:id="@+id/btn_salir"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/button_rounded_border"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="10dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/salir" />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
