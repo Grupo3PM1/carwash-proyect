@@ -9,5 +9,6 @@ public class RestApiMethod {
     public static final String ApiGetServices = "https://dandsol.000webhostapp.com/ElCatrachoCarwash/buscar_servicios.php";
     public static final String ApiDeleteUrl = "https://stephanyweb.000webhostapp.com/api/eliminar.php";
     public static final String ApiPutUrlClient = "https://dandsol.000webhostapp.com/ElCatrachoCarwash/modificar_cliente.php";
+    public static final String ApiPostCotizacionUrl = "https://dandsol.000webhostapp.com/ElCatrachoCarwash/crear_cotizacion.php";
 
 }

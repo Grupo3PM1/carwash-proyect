@@ -151,7 +151,8 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //guardarCotizacion();
+
+                guardarCotizacion();
             }
         });
 
@@ -171,19 +172,20 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
                         if (arraycontenido2[position] == "A Domicilio") {
                             seleccionar = 0;
 
-                            //Toast.makeText(getContext(),"Latitud es "+Latitud, Toast.LENGTH_SHORT).show();
+                            /*Toast.makeText(getContext(),"Latitud es "+Latitud, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getActivity(), MapsActivity.class);
                             intent.putExtra("decision", seleccionar);
-                            startActivity(intent);
+                            startActivity(intent);*/
 
 
                     } else if (arraycontenido2[position] == "Centro de Servicio") {
                         seleccionar = 1;
 
-                        Intent intent = new Intent(getActivity(), MapsActivity.class);
+                        /*Intent intent = new Intent(getActivity(), MapsActivity.class);
                         intent.putExtra("decision", seleccionar);
-                        startActivity(intent);
+                        startActivity(intent);*/
                     }
+                    ItemUbiacion = (String) spubicacion.getAdapter().getItem(position).toString();   // El elemento seleccionado del Spinner
 
 
             }
@@ -393,7 +395,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
             DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                    txtfecha.setText(dayOfMonth+"/"+(dayOfMonth+1)+"/"+year);
+                    txtfecha.setText(dayOfMonth+"-"+(monthOfYear+1)+"-"+year);
                 }
             },anio,mes,dia);
             datePickerDialog.show();
@@ -498,16 +500,17 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    /*
+
+
     //METODO GUARDAR COTIZACION//
     private void guardarCotizacion(){
-        String URL = RestApiMethod.ApiPutUrlClient;
+        String URL = RestApiMethod.ApiPostCotizacionUrl;
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                String FechaHora= txtfecha.getText().toString()+" "+txthora.getText().toString()+":00";
                 Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), GetStringImage(img), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), ttnombre.getText().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), FechaHora, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -518,9 +521,15 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> parametros=new HashMap<String,String>();
-                parametros.put("uid",uid);
-                parametros.put("nombre",ttnombre.getText().toString());
-                parametros.put("foto",GetStringImage(img));
+                String FechaHora= txtfecha.getText().toString()+" "+txthora.getText().toString()+":00";
+                parametros.put("fechsev", FechaHora);
+                parametros.put("estado", "Pendiente");
+                parametros.put("servicio", ItemServicio);
+                parametros.put("vehiculo", ItemVehiculo);
+                parametros.put("tipubica", ItemUbiacion);
+                parametros.put("latit", "13.310767");
+                parametros.put("longit", "-87.178477");
+                parametros.put("idclnt",idUser);
                 return parametros;
             }
         };
@@ -529,5 +538,5 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
     }
     //FIN METODO GUARDAR COTIZACION//
 
-     */
+
 }
