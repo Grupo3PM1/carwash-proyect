@@ -33,7 +33,7 @@
                     android:text="Numero"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/cajas"
-                    android:textSize="24sp" />
+                    android:textSize="16sp" />
 
                 <Space
                     android:layout_width="180dp"
@@ -43,13 +43,13 @@
                     android:id="@+id/txtEstado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
                     android:layout_toRightOf="@+id/txtvehiculo"
                     android:layout_weight="1"
                     android:text="Estado"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <TextView
@@ -61,7 +61,7 @@
                 android:layout_toRightOf="@+id/firma"
                 android:text="Vehiculo"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="20sp" />
+                android:textSize="14sp" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
                 android:layout_toRightOf="@+id/txtvehiculo"
                 android:text="Servicio"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
             <Space
                 android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                     android:layout_toRightOf="@+id/txtvehiculo"
                     android:text="TipoUbicacion"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <Space
                     android:layout_width="30dp"
@@ -111,7 +111,7 @@
                     android:layout_toRightOf="@+id/txtvehiculo"
                     android:text="FechaEmision"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
         </LinearLayout>
