@@ -14,9 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.HistorialViewHolder> {
-    private List<Historial> items;
 
-    public HistorialAdapter(List<Historial> items) {
+    ArrayList<Historial> items;
+
+    public HistorialAdapter(ArrayList<Historial> items) {
         this.items = items;
     }
 
@@ -28,11 +29,11 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
 
     @Override
     public void onBindViewHolder(HistorialViewHolder viewHolder, int i) {
-        viewHolder.TVnumero.setText(items.get(i).getNumero());
+        viewHolder.TVnumero.setText("Cotizacion #"+items.get(i).getNumero());
         viewHolder.TVvehiculo.setText(items.get(i).getVehiculo());
         viewHolder.TVservicio.setText(items.get(i).getServicio());
         viewHolder.TVubicacion.setText(items.get(i).getUbicacion());
-        viewHolder.TVfecha.setText(items.get(i).getFecha());
+        viewHolder.TVfecha.setText("Fecha: "+items.get(i).getFecha());
         viewHolder.TVestado.setText(items.get(i).getEstado());
     }
 

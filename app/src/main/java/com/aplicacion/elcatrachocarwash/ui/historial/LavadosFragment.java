@@ -48,7 +48,7 @@ public class LavadosFragment extends Fragment {
     RecyclerView recycler;
 
     ArrayList<Historial> historials;
-    List<Historial> items;
+    ArrayList<Historial> items;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,7 +58,13 @@ public class LavadosFragment extends Fragment {
 
         http = new AsyncHttpClient();
 
-        historials = new ArrayList<>();
+        items = new ArrayList<>();
+
+        // Obtener el Recycler
+        recycler = (RecyclerView) view.findViewById(R.id.reciclador);
+
+        // Usar un administrador para LinearLayout
+        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         GetUser();
 
@@ -68,16 +74,6 @@ public class LavadosFragment extends Fragment {
             public void run() {
                 // Inicializar Cotizaciones
                 ObtenerCotizacion();
-
-                // Obtener el Recycler
-                recycler = (RecyclerView)view.findViewById(R.id.reciclador);
-
-                // Usar un administrador para LinearLayout
-                recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-
-                // Crear un nuevo adaptador
-                HistorialAdapter adapter = new HistorialAdapter(items);
-                recycler.setAdapter(adapter);
             }
         };
 
@@ -116,7 +112,8 @@ public class LavadosFragment extends Fragment {
                     try {
                         jsonObject = response.getJSONObject(i);
                         idUser = jsonObject.getString("clnt_id");
-                        URLQuotation = "https://dandsol.000webhostapp.com/ElCatrachoCarwash/ver_historial.php?id=39";
+                        URLQuotation = "https://dandsol.000webhostapp.com/ElCatrachoCarwash/ver_historial_lavados.php?id="+idUser+"";
+                        Toast.makeText(getContext(), "URL: "+URLQuotation, Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -171,6 +168,10 @@ public class LavadosFragment extends Fragment {
             }
 
             HistorialList();
+
+            // Crear un nuevo adaptador
+            HistorialAdapter adapter = new HistorialAdapter(items);
+            recycler.setAdapter(adapter);
         }
         catch (Exception e1){
             e1.printStackTrace();
@@ -179,10 +180,7 @@ public class LavadosFragment extends Fragment {
 
     private void HistorialList() {
 
-        items = new ArrayList<>();
-
         for (int i = 0;  i < historials.size(); i++){
-
             items.add(new Historial(
                     historials.get(i).getNumero(),
                     historials.get(i).getVehiculo(),
