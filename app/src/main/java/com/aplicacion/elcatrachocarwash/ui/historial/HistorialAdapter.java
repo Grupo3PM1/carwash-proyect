@@ -1,11 +1,8 @@
 package com.aplicacion.elcatrachocarwash.ui.historial;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aplicacion.elcatrachocarwash.R;
 import com.aplicacion.elcatrachocarwash.ui.clases.Historial;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.HistorialViewHolder> {
@@ -53,8 +51,8 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
             TVvehiculo = (TextView) v.findViewById(R.id.txtvehiculo);
             TVservicio = (TextView) v.findViewById(R.id.txtservicio);
             TVubicacion = (TextView) v.findViewById(R.id.txtTipoUbicacion);
-            TVfecha = (TextView) v.findViewById(R.id.txtfecha);
-            TVestado = (TextView) v.findViewById(R.id.txtFechaEmision);
+            TVfecha = (TextView) v.findViewById(R.id.txtFechaEmision);
+            TVestado = (TextView) v.findViewById(R.id.txtEstado);
         }
     }
 }

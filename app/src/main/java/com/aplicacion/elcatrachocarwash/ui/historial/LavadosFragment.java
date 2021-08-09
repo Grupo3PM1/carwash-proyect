@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,12 +43,11 @@ public class LavadosFragment extends Fragment {
     private FirebaseAuth mAuth;     // Iniciar Firebase
     private String uid;             // UID del Usuario en Firebase
     private String idUser;          // ID del Usuario en MySQL
-    private String URLQuotation;      // URL de Spinner Vehiculo
+    private String URLQuotation;      // URL de Lista Cotizacion Vehiculo
 
     RecyclerView recycler;
 
     ArrayList<Historial> historials;
-    List<Historial> items;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,20 +55,33 @@ public class LavadosFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_lavados, container, false);
 
+        http = new AsyncHttpClient();
+
         historials = new ArrayList<>();
 
-        // Inicializar Imagenes
-        ObtenerCotizacion();
+        GetUser();
 
-        // Obtener el Recycler
-        recycler = (RecyclerView)view.findViewById(R.id.reciclador);
+        final int interval = 2000; // 1 Second
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable(){
+            public void run() {
+                // Inicializar Cotizaciones
+                ObtenerCotizacion();
 
-        // Usar un administrador para LinearLayout
-        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                // Obtener el Recycler
+                recycler = (RecyclerView)view.findViewById(R.id.reciclador);
 
-        // Crear un nuevo adaptador
-        HistorialAdapter adapter = new HistorialAdapter(items);
-        recycler.setAdapter(adapter);
+                // Usar un administrador para LinearLayout
+                recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                // Crear un nuevo adaptador
+                HistorialAdapter adapter = new HistorialAdapter(items);
+                recycler.setAdapter(adapter);
+            }
+        };
+
+        handler.postAtTime(runnable, System.currentTimeMillis() + interval);
+        handler.postDelayed(runnable, interval);
 
         // Inflate the layout for this fragment
         return view;
