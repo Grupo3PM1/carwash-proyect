@@ -29,11 +29,11 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
 
     @Override
     public void onBindViewHolder(HistorialViewHolder viewHolder, int i) {
-        viewHolder.TVnumero.setText("Cotizacion #"+items.get(i).getNumero());
+        viewHolder.TVnumero.setText("Cotización #"+items.get(i).getNumero());
         viewHolder.TVvehiculo.setText(items.get(i).getVehiculo());
         viewHolder.TVservicio.setText(items.get(i).getServicio());
         viewHolder.TVubicacion.setText(items.get(i).getUbicacion());
-        viewHolder.TVfecha.setText("Fecha: "+items.get(i).getFecha());
+        viewHolder.TVfecha.setText("Fecha Emisión: "+items.get(i).getFecha());
         viewHolder.TVestado.setText(items.get(i).getEstado());
     }
 
