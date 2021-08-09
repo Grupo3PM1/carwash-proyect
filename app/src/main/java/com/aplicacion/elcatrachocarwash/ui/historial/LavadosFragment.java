@@ -48,6 +48,7 @@ public class LavadosFragment extends Fragment {
     RecyclerView recycler;
 
     ArrayList<Historial> historials;
+    List<Historial> items;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
