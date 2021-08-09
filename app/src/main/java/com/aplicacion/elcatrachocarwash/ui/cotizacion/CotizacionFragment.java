@@ -3,11 +3,15 @@ package com.aplicacion.elcatrachocarwash.ui.cotizacion;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -34,6 +38,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -45,6 +50,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.aplicacion.elcatrachocarwash.MainActivity;
 import com.aplicacion.elcatrachocarwash.MapsActivity;
 import com.aplicacion.elcatrachocarwash.R;
 import com.aplicacion.elcatrachocarwash.RestApiMethod;
@@ -68,6 +74,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -512,7 +519,9 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
                 Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
+                createNotification();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -526,7 +535,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
                 Map<String,String> parametros=new HashMap<String,String>();
                 String FechaHora= txtfecha.getText().toString()+" "+txthora.getText().toString()+":00";
                 parametros.put("fechsev", FechaHora);
-                parametros.put("estado", "Pendiente");
+                parametros.put("estado", "Aprobado");
                 parametros.put("servicio", ItemServicio);
                 parametros.put("vehiculo", ItemVehiculo);
                 parametros.put("tipubica", ItemUbiacion);
@@ -577,6 +586,41 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
             guardarCotizacion();
         }
         return retorno;
+    }
+
+
+    ////------------------Notificacion Push----------------------////
+
+
+    private void createNotification(){
+        String id="mensaje";
+        NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(),id);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(id, "nuevo", NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setShowBadge(true);
+            assert notificationManager != null;
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        builder.setAutoCancel(true).setWhen(System.currentTimeMillis())
+                .setContentTitle("Cotizacion de Servicio").setSmallIcon(R.drawable.carwash_redondo)
+                .setContentText("Su cotizacion ha sido aprobada con exito.")
+                .setColor(Color.BLUE)
+                .setContentIntent(sendNotification())
+                .setContentInfo("nuevo");
+        Random random = new Random();
+        int id_notification = random.nextInt(8000);
+
+        assert notificationManager != null;
+        notificationManager.notify(id_notification,builder.build());
+    }
+
+    public PendingIntent sendNotification(){
+        Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+        intent.putExtra("color", "rojo");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return PendingIntent.getActivity(getActivity(),0,intent,0);
     }
 
 }

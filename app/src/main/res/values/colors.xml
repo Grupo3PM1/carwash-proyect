@@ -17,4 +17,5 @@
     <color name="actualizar">#B7950B</color>
     <color name="pressed_color">#4D90FE</color>
     <color name="default_color">#D2B4DE</color>
+    <color name="offline">#171D2C</color>
 </resources>

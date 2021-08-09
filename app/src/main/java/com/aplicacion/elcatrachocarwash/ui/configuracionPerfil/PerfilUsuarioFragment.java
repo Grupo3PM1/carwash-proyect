@@ -1,6 +1,7 @@
 package com.aplicacion.elcatrachocarwash.ui.configuracionPerfil;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,7 +11,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,15 +21,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
+import android.text.Layout;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,15 +44,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.aplicacion.elcatrachocarwash.LoginActivity;
 import com.aplicacion.elcatrachocarwash.MainActivity;
 import com.aplicacion.elcatrachocarwash.R;
 import com.aplicacion.elcatrachocarwash.RestApiMethod;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -58,7 +55,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -74,8 +70,6 @@ public class PerfilUsuarioFragment extends Fragment {
      Button btn_actualizar;
      byte [] Foto;
 
-
-
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PETICION_ACCESO_CAMARA = 100;
 
@@ -84,10 +78,12 @@ public class PerfilUsuarioFragment extends Fragment {
 
     private String uid; // UID del Usuario
 
+    @SuppressLint("ResourceType")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_perfil_usuario, container, false);
+
 
         ttnombre = (TextView)view.findViewById(R.id.ttnombre);
         ttpais = (TextView)view.findViewById(R.id.ttpais);
@@ -101,8 +97,8 @@ public class PerfilUsuarioFragment extends Fragment {
         ttpais.setEnabled(false);
         ttemail.setEnabled(false);
 
-        GetUser(); // Cargar Datos del Usuario
 
+        GetUser();  ///cargar usuario
         /*
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -324,34 +320,4 @@ public class PerfilUsuarioFragment extends Fragment {
 
     }
 
-    private void createNotification(){
-        String id="mensaje";
-        NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(),id);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(id, "nuevo", NotificationManager.IMPORTANCE_HIGH);
-            notificationChannel.setShowBadge(true);
-            assert notificationManager != null;
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-        builder.setAutoCancel(true).setWhen(System.currentTimeMillis())
-                .setContentTitle("Cotizacion Aprobada").setSmallIcon(R.drawable.carwash_redondo)
-                .setContentText("Su cotizacion ha sido aprobada con éxito.")
-                .setColor(Color.BLUE)
-                .setContentIntent(sendNotification())
-                .setContentInfo("nuevo");
-        Random random = new Random();
-        int id_notification = random.nextInt(8000);
-
-        assert notificationManager != null;
-        notificationManager.notify(id_notification,builder.build());
-    }
-
-    public PendingIntent sendNotification(){
-        Intent intent = new Intent(getActivity().getApplicationContext(),MainActivity.class);
-        intent.putExtra("color", "rojo");
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        return PendingIntent.getActivity(getActivity(),0,intent,0);
-    }
 }
