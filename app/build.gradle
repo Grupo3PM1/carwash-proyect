@@ -70,6 +70,8 @@ dependencies {
 
     implementation 'com.basgeekball:awesome-validation:4.3'
 
+    implementation 'com.google.firebase:firebase-messaging:20.2.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
