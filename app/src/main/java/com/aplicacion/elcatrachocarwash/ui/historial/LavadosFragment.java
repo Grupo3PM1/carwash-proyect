@@ -113,7 +113,6 @@ public class LavadosFragment extends Fragment {
                         jsonObject = response.getJSONObject(i);
                         idUser = jsonObject.getString("clnt_id");
                         URLQuotation = "https://dandsol.000webhostapp.com/ElCatrachoCarwash/ver_historial_lavados.php?id="+idUser+"";
-                        Toast.makeText(getContext(), "URL: "+URLQuotation, Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
