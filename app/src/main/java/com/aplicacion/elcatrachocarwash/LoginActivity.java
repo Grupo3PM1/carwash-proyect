@@ -69,55 +69,53 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            ///Inicializamos Firebase para conectarnos a una instancia existente
+            mAuth = FirebaseAuth.getInstance();
+
+            ///Validamos que el formato de correo y contraseña esten correctos
+            awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
+            awesomenValitation.addValidation(this,R.id.txtEmail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
+            awesomenValitation.addValidation(this,R.id.txtPass, ".{6,}",R.string.invalid_password);
 
 
-        ///Inicializamos Firebase para conectarnos a una instancia existente
-        mAuth = FirebaseAuth.getInstance();
+            btn_iniciar = (Button)findViewById(R.id.btn_iniciar);
+            txtEmail = (EditText)findViewById(R.id.txtEmail);
+            txtPass = (EditText)findViewById(R.id.txtPass);
+            tt_sign = (TextView)findViewById(R.id.tt_sign);
+            tt_restablecercontra = (TextView)findViewById(R.id.tt_restablecercontra);
 
-        ///Validamos que el formato de correo y contraseña esten correctos
-        awesomenValitation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomenValitation.addValidation(this,R.id.txtEmail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
-        awesomenValitation.addValidation(this,R.id.txtPass, ".{6,}",R.string.invalid_password);
+            //-------- INICIO DE EVENTO ONCLICK CON LOS BOTONES --------///
 
-
-
-        btn_iniciar = (Button)findViewById(R.id.btn_iniciar);
-        txtEmail = (EditText)findViewById(R.id.txtEmail);
-        txtPass = (EditText)findViewById(R.id.txtPass);
-        tt_sign = (TextView)findViewById(R.id.tt_sign);
-        tt_restablecercontra = (TextView)findViewById(R.id.tt_restablecercontra);
-
-
-
-        //-------- INICIO DE EVENTO ONCLICK CON LOS BOTONES --------///
-
-        //Crear una cuenta nueva, nos envia al Activity de RegistrarUsuario//
-        tt_sign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegistrarUsuario.class);
-                startActivity(intent);
-            }
-        });
+            //Crear una cuenta nueva, nos envia al Activity de RegistrarUsuario//
+            tt_sign.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(LoginActivity.this, RegistrarUsuario.class);
+                    startActivity(intent);
+                }
+            });
 
 
+            //Restablecer contraseña, nos envia al Activity de ActivityRestablecer//
+            tt_restablecercontra.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(LoginActivity.this, ActivityRestablecer.class);
+                    startActivity(intent);
 
-        //Restablecer contraseña, nos envia al Activity de ActivityRestablecer//
-        tt_restablecercontra.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ActivityRestablecer.class);
-                startActivity(intent);
-
-            }
-        });
-
+                }
+            });
 
 
-        //Acceso con Correo Electronico Verificado//
-        btn_iniciar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            //Acceso con Correo Electronico Verificado//
+            btn_iniciar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     String email = txtEmail.getText().toString();
                     String pass = txtPass.getText().toString();
 
@@ -157,11 +155,18 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
                     }else{
-                       // Toast.makeText(LoginActivity.this,"Ingrese un correo y contraseña", Toast.LENGTH_LONG).show();
+                        // Toast.makeText(LoginActivity.this,"Ingrese un correo y contraseña", Toast.LENGTH_LONG).show();
                     }
 
-            }
-        });
+                }
+            });
+
+        }else{
+            Toast.makeText(this,"Estas fuera de linea. Verifica tu conexion a internet y vuelve a intentarlo",Toast.LENGTH_SHORT).show();
+
+        }
+
+
 
         //-------- FINAL DE EVENTO ONCLICK CON LOS BOTONES --------///
 

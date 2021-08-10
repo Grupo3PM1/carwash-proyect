@@ -2,10 +2,12 @@ package com.aplicacion.elcatrachocarwash.ui.configuracionPerfil;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.utils.widget.MockView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -28,6 +31,7 @@ import android.provider.MediaStore;
 import android.text.Layout;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -46,6 +50,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.aplicacion.elcatrachocarwash.MainActivity;
 import com.aplicacion.elcatrachocarwash.R;
+import com.aplicacion.elcatrachocarwash.RegistrarUsuario;
 import com.aplicacion.elcatrachocarwash.RestApiMethod;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -69,6 +74,8 @@ public class PerfilUsuarioFragment extends Fragment {
      ImageButton btn_galeria,btn_camara;
      Button btn_actualizar;
      byte [] Foto;
+    View v;
+    MotionEvent event;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PETICION_ACCESO_CAMARA = 100;
@@ -81,24 +88,98 @@ public class PerfilUsuarioFragment extends Fragment {
     @SuppressLint("ResourceType")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState){
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil_usuario, container, false);
 
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        ttnombre = (TextView)view.findViewById(R.id.ttnombre);
-        ttpais = (TextView)view.findViewById(R.id.ttpais);
-        ttemail = (TextView)view.findViewById(R.id.ttemail);
-        img = (ImageView)view.findViewById(R.id.img);
-        btn_galeria = (ImageButton)view.findViewById(R.id.btn_galeria);
-        btn_camara = (ImageButton)view.findViewById(R.id.btn_camara);
-        btn_actualizar = (Button)view.findViewById(R.id.btn_actualizar);
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            ttnombre = (TextView) view.findViewById(R.id.ttnombre);
+            ttpais = (TextView) view.findViewById(R.id.ttpais);
+            ttemail = (TextView) view.findViewById(R.id.ttemail);
+            img = (ImageView) view.findViewById(R.id.img);
+            btn_galeria = (ImageButton) view.findViewById(R.id.btn_galeria);
+            btn_camara = (ImageButton) view.findViewById(R.id.btn_camara);
+            btn_actualizar = (Button) view.findViewById(R.id.btn_actualizar);
 
 
-        ttpais.setEnabled(false);
-        ttemail.setEnabled(false);
+            ttpais.setEnabled(false);
+            ttemail.setEnabled(false);
+
+            btn_galeria.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(getContext(), "Hello toast!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/");
+                    startActivityForResult(intent.createChooser(intent, "Seleccione la aplicacion"), 10);
 
 
-        GetUser();  ///cargar usuario
+                }
+            });
+
+            btn_camara.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), "Hello toast!", Toast.LENGTH_SHORT).show();
+
+                    permisos();
+
+
+                }
+            });
+
+
+            btn_actualizar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    actualizarPersona();
+                    //createNotification();
+                }
+            });
+
+
+            GetUser();  ///cargar usuario
+
+
+        }else{
+            Toast.makeText(getActivity(),"Sin conexion a internet",Toast.LENGTH_SHORT).show();
+            view.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Se encuentra fuera de linea, verifique su conexion a internet y vuelva a intentar.");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().finish();
+                                }
+                            });
+                            // Create the AlertDialog object and return it
+                            AlertDialog titulo =builder.create();
+                            titulo.show();
+
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
+
+        return view;
+
+    }
+
+
+
+
+
+
         /*
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -109,42 +190,10 @@ public class PerfilUsuarioFragment extends Fragment {
         */
 
 
-        btn_galeria.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getContext(), "Hello toast!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/");
-                startActivityForResult(intent.createChooser(intent,"Seleccione la aplicacion"),10);
 
 
-            }
-        });
-
-        btn_camara.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Hello toast!", Toast.LENGTH_SHORT).show();
-
-                permisos();
 
 
-            }
-        });
-
-
-        btn_actualizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actualizarPersona();
-                //createNotification();
-            }
-        });
-
-
-        return view;
-
-    }
 
 
     private void actualizarusuario() {
@@ -319,5 +368,8 @@ public class PerfilUsuarioFragment extends Fragment {
         return encode;
 
     }
+
+
+
 
 }

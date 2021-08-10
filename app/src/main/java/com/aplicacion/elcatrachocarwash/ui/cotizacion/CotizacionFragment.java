@@ -18,12 +18,15 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -127,65 +130,69 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
 
         view = inflater.inflate(R.layout.fragment_cotizacion, container, false);
 
-        http = new AsyncHttpClient();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        spvehiculo = (Spinner)view.findViewById(R.id.spvehiculo);
-        spservicio = (Spinner)view.findViewById(R.id.spservicio);
-        spubicacion = (Spinner)view.findViewById(R.id.spubicacion);
-        btnfecha = (Button)view.findViewById(R.id.btnfecha);
-        btnhora = (Button)view.findViewById(R.id.btnhora);
-        txtfecha = (EditText)view.findViewById(R.id.txtfecha);
-        txthora = (EditText)view.findViewById(R.id.txthora);
-        text_home3 = (TextView) view.findViewById(R.id.text_home3);
-        btn_guardar = (Button)view.findViewById(R.id.btncotizacion);
+        if (networkInfo != null && networkInfo.isConnected()) {
+            http = new AsyncHttpClient();
 
-        btnfecha.setOnClickListener(this);
-        btnhora.setOnClickListener(this);
+            spvehiculo = (Spinner)view.findViewById(R.id.spvehiculo);
+            spservicio = (Spinner)view.findViewById(R.id.spservicio);
+            spubicacion = (Spinner)view.findViewById(R.id.spubicacion);
+            btnfecha = (Button)view.findViewById(R.id.btnfecha);
+            btnhora = (Button)view.findViewById(R.id.btnhora);
+            txtfecha = (EditText)view.findViewById(R.id.txtfecha);
+            txthora = (EditText)view.findViewById(R.id.txthora);
+            text_home3 = (TextView) view.findViewById(R.id.text_home3);
+            btn_guardar = (Button)view.findViewById(R.id.btncotizacion);
 
-        txtfecha.setInputType(InputType.TYPE_NULL);
-        txthora.setInputType(InputType.TYPE_NULL);
+            btnfecha.setOnClickListener(this);
+            btnhora.setOnClickListener(this);
 
-        GetUser();
+            txtfecha.setInputType(InputType.TYPE_NULL);
+            txthora.setInputType(InputType.TYPE_NULL);
 
-        final int interval = 2000; // 1 Second
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable(){
-            public void run() {
-                ObtenerVehiculos();
-                ObtenerServicios();
-            }
-        };
+            GetUser();
 
-        handler.postAtTime(runnable, System.currentTimeMillis() + interval);
-        handler.postDelayed(runnable, interval);
-
-        btn_guardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validar();
-
-            }
-        });
-
-
-        //        SELECION DEL TIPO DE SERVICIO             //
-        spubicacion = (Spinner)view.findViewById(R.id.spubicacion);
-        arraycontenido2 = new String[]{"Seleccione","Centro de Servicio", "A Domicilio"};
-        ArrayList<String> ubicacion = new ArrayList<>(Arrays.asList(arraycontenido2));
-        adapter2 = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, ubicacion);
-        spubicacion.setAdapter(adapter2);
-        spubicacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (isFirstTime){
-                    isFirstTime = true;
+            final int interval = 2000; // 1 Second
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable(){
+                public void run() {
+                    ObtenerVehiculos();
+                    ObtenerServicios();
                 }
-                        if (arraycontenido2[position] == "A Domicilio") {
-                            seleccionar = 0;
+            };
 
-                            Intent intent = new Intent(getActivity(), MapsActivity.class);
-                            intent.putExtra("decision", seleccionar);
-                            startActivity(intent);
+            handler.postAtTime(runnable, System.currentTimeMillis() + interval);
+            handler.postDelayed(runnable, interval);
+
+            btn_guardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    validar();
+
+                }
+            });
+
+
+            //        SELECION DEL TIPO DE SERVICIO             //
+            spubicacion = (Spinner)view.findViewById(R.id.spubicacion);
+            arraycontenido2 = new String[]{"Seleccione","Centro de Servicio", "A Domicilio"};
+            ArrayList<String> ubicacion = new ArrayList<>(Arrays.asList(arraycontenido2));
+            adapter2 = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, ubicacion);
+            spubicacion.setAdapter(adapter2);
+            spubicacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (isFirstTime){
+                        isFirstTime = true;
+                    }
+                    if (arraycontenido2[position] == "A Domicilio") {
+                        seleccionar = 0;
+
+                        Intent intent = new Intent(getActivity(), MapsActivity.class);
+                        intent.putExtra("decision", seleccionar);
+                        startActivity(intent);
 
 
                     } else if (arraycontenido2[position] == "Centro de Servicio") {
@@ -198,16 +205,46 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
                     ItemUbiacion = (String) spubicacion.getAdapter().getItem(position).toString();   // El elemento seleccionado del Spinner
 
 
-            }
+                }
 
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+                }
+            });
 
-        //        FIN DE SELECION DEL TIPO DE SERVICIO             //
+            //        FIN DE SELECION DEL TIPO DE SERVICIO             //
+
+        }else{
+            Toast.makeText(getActivity(),"Sin conexion a internet",Toast.LENGTH_SHORT).show();
+            view.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Se encuentra fuera de linea, verifique su conexion a internet y vuelva a intentar.");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().finish();
+                                }
+                            });
+                            // Create the AlertDialog object and return it
+                            AlertDialog titulo =builder.create();
+                            titulo.show();
+
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
+
+
+
 
         return view;
 

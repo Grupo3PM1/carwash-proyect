@@ -1,5 +1,10 @@
 package com.aplicacion.elcatrachocarwash.ui.cotizacion;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -65,27 +71,58 @@ public class Fragment_Registro_auto extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_registro_vehiculo, container, false);
 
-        http = new AsyncHttpClient();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        // Elementos del diseño de Spinners
-        sp_marca = (Spinner)view.findViewById(R.id.spmarca); //Elemento del Spinner de Marca y modelo
-        sp_anio = (Spinner)view.findViewById(R.id.spanio); //Elemento del Spinner de Años
-        sp_aceite = (Spinner)view.findViewById(R.id.sptipoaceite); //Elemento del Spinner de Tipo de Aceite
+        if (networkInfo != null && networkInfo.isConnected()) {
+            http = new AsyncHttpClient();
 
-        btn_guardar = (Button)view.findViewById(R.id.btnConfigurar);
+            // Elementos del diseño de Spinners
+            sp_marca = (Spinner)view.findViewById(R.id.spmarca); //Elemento del Spinner de Marca y modelo
+            sp_anio = (Spinner)view.findViewById(R.id.spanio); //Elemento del Spinner de Años
+            sp_aceite = (Spinner)view.findViewById(R.id.sptipoaceite); //Elemento del Spinner de Tipo de Aceite
 
-        ObtenerModelos();   // Lista de Modelos en Spinner Marca y modelo
-        ObtenerAnio();      // Lista de Año en Spinner Años
-        ObtenerAceites();   // Lista de Aceites en Spinner Tipo de Aceite
+            btn_guardar = (Button)view.findViewById(R.id.btnConfigurar);
 
-        GetUser();          // Obtener ID del usuario en MySQL
+            ObtenerModelos();   // Lista de Modelos en Spinner Marca y modelo
+            ObtenerAnio();      // Lista de Año en Spinner Años
+            ObtenerAceites();   // Lista de Aceites en Spinner Tipo de Aceite
 
-        btn_guardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InsertVehicle();    // Insertar en MySQL datos de Vehiculo del Usuario
-            }
-        });
+            GetUser();          // Obtener ID del usuario en MySQL
+
+            btn_guardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    InsertVehicle();    // Insertar en MySQL datos de Vehiculo del Usuario
+                }
+            });
+
+        }else{
+            Toast.makeText(getActivity(),"Sin conexion a internet",Toast.LENGTH_SHORT).show();
+            view.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Se encuentra fuera de linea, verifique su conexion a internet y vuelva a intentar.");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().finish();
+                                }
+                            });
+                            // Create the AlertDialog object and return it
+                            AlertDialog titulo =builder.create();
+                            titulo.show();
+
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
 
         return view;
     }

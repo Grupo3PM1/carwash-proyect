@@ -1,7 +1,12 @@
 package com.aplicacion.elcatrachocarwash.ui.historial;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -56,30 +62,60 @@ public class LavadosFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_lavados, container, false);
 
-        http = new AsyncHttpClient();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        items = new ArrayList<>();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            http = new AsyncHttpClient();
 
-        // Obtener el Recycler
-        recycler = (RecyclerView) view.findViewById(R.id.reciclador);
+            items = new ArrayList<>();
 
-        // Usar un administrador para LinearLayout
-        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+            // Obtener el Recycler
+            recycler = (RecyclerView) view.findViewById(R.id.reciclador);
 
-        GetUser();
+            // Usar un administrador para LinearLayout
+            recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        final int interval = 2000; // 1 Second
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable(){
-            public void run() {
-                // Inicializar Cotizaciones
-                ObtenerCotizacion();
-            }
-        };
+            GetUser();
 
-        handler.postAtTime(runnable, System.currentTimeMillis() + interval);
-        handler.postDelayed(runnable, interval);
+            final int interval = 2000; // 1 Second
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable(){
+                public void run() {
+                    // Inicializar Cotizaciones
+                    ObtenerCotizacion();
+                }
+            };
 
+            handler.postAtTime(runnable, System.currentTimeMillis() + interval);
+            handler.postDelayed(runnable, interval);
+
+        }else{
+            Toast.makeText(getActivity(),"Sin conexion a internet",Toast.LENGTH_SHORT).show();
+            view.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Se encuentra fuera de linea, verifique su conexion a internet y vuelva a intentar.");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().finish();
+                                }
+                            });
+                            // Create the AlertDialog object and return it
+                            AlertDialog titulo =builder.create();
+                            titulo.show();
+
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
         // Inflate the layout for this fragment
         return view;
     }

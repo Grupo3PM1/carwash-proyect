@@ -5,7 +5,7 @@
     android:id="@+id/activity_gallery"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pantalla_user"
+    android:background="@color/white"
     tools:context=".ui.historial.LavadosFragment">
 
     <RelativeLayout

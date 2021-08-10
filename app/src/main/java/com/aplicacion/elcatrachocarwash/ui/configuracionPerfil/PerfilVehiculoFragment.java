@@ -1,8 +1,13 @@
 package com.aplicacion.elcatrachocarwash.ui.configuracionPerfil;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.constraintlayout.solver.ArrayRow;
@@ -10,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -73,48 +79,80 @@ public class PerfilVehiculoFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_perfil_vehiculo, container, false);
 
-        Lista = (ListView)view.findViewById(R.id.lista);
-        btnConfigurar = (Button)view.findViewById(R.id.btnConfigurar);
-        http = new AsyncHttpClient();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        btnConfigurar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getContext(), "El Id Seleccionado es: "+IdVehiculoBD, Toast.LENGTH_SHORT).show();
-                if(SelectedRow==false){
-                    Toast.makeText(getContext(), "Seleccione un Vehiculo para elimnar", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    eliminarVehiculo();
-                }
+        if (networkInfo != null && networkInfo.isConnected()) {
 
-            }
-        });
+            Lista = (ListView)view.findViewById(R.id.lista);
+            btnConfigurar = (Button)view.findViewById(R.id.btnConfigurar);
+            http = new AsyncHttpClient();
 
-        GetUser();
-
-        final int interval = 1500; // 1 Second
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable(){
-            public void run() {
-                ObtenerVehiculos();     // Funcion para cargar Vehiculos en Listview
-                Lista.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-                Lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        view.setSelected(true);
-                        //Id_Vehiculo = String.valueOf(position);
-                        SelectedRow = true;
-                        IdVehiculoBD = iddevehiculo[position];
-                        //Toast.makeText(getContext(), "Id De este es: "+IdVehiculoBD, Toast.LENGTH_SHORT).show();
-
+            btnConfigurar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(getContext(), "El Id Seleccionado es: "+IdVehiculoBD, Toast.LENGTH_SHORT).show();
+                    if(SelectedRow==false){
+                        Toast.makeText(getContext(), "Seleccione un Vehiculo para elimnar", Toast.LENGTH_SHORT).show();
                     }
-                });
-            }
+                    else{
+                        eliminarVehiculo();
+                    }
+
+                }
+            });
+
+            GetUser();
+
+            final int interval = 1500; // 1 Second
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable(){
+                public void run() {
+                    ObtenerVehiculos();     // Funcion para cargar Vehiculos en Listview
+                    Lista.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                    Lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            view.setSelected(true);
+                            //Id_Vehiculo = String.valueOf(position);
+                            SelectedRow = true;
+                            IdVehiculoBD = iddevehiculo[position];
+                            //Toast.makeText(getContext(), "Id De este es: "+IdVehiculoBD, Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                }
             };
 
-        handler.postAtTime(runnable, System.currentTimeMillis() + interval);
-        handler.postDelayed(runnable, interval);
+            handler.postAtTime(runnable, System.currentTimeMillis() + interval);
+            handler.postDelayed(runnable, interval);
+
+        }else{
+            Toast.makeText(getActivity(),"Sin conexion a internet",Toast.LENGTH_SHORT).show();
+            view.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Se encuentra fuera de linea, verifique su conexion a internet y vuelva a intentar.");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().finish();
+                                }
+                            });
+                            // Create the AlertDialog object and return it
+                            AlertDialog titulo =builder.create();
+                            titulo.show();
+
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
 
         // Inflate the layout for this fragment
         return view;
