@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/pantalla_user"
     tools:context=".ui.cotizacion.CotizacionFragment">
 
     <ImageView
@@ -179,6 +179,7 @@
         android:inputType="textPersonName"
         android:text=""
         android:textColor="#000000"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/btnfecha"
@@ -210,6 +211,7 @@
         android:inputType="textPersonName"
         android:text=""
         android:textColor="#000000"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/btnhora"

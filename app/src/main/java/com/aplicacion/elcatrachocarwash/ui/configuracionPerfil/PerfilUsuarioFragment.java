@@ -236,7 +236,6 @@ public class PerfilUsuarioFragment extends Fragment {
                         Bitmap bitmapfotoBD = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                         //Seteamos dicho Bitmap en el ImageView
                         img.setImageBitmap(bitmapfotoBD);
-
                     } catch (JSONException e) {
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -266,7 +265,8 @@ public class PerfilUsuarioFragment extends Fragment {
                         PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PETICION_ACCESO_CAMARA);
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                                                                                    PETICION_ACCESO_CAMARA);
         }
         else
         {
@@ -325,8 +325,8 @@ public class PerfilUsuarioFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 Toast.makeText(getContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), GetStringImage(img), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), ttnombre.getText().toString(), Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(getContext(), GetStringImage(img), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), ttnombre.getText().toString(), Toast.LENGTH_SHORT).show();*/
             }
         }, new Response.ErrorListener() {
             @Override

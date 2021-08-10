@@ -187,7 +187,8 @@ public class PerfilVehiculoFragment extends Fragment {
                     try {
                         jsonObject = response.getJSONObject(i);
                         idUser = jsonObject.getString("clnt_id");
-                        URLVehicle = "https://dandsol.000webhostapp.com/ElCatrachoCarwash/buscar_vehiculo_lista.php?id="+idUser+"";
+                        URLVehicle = "https://dandsol.000webhostapp.com/ElCatrachoCarwash/buscar_vehiculo_lista.php?id="
+                                        +idUser+"";
                     } catch (JSONException e) {
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -264,8 +265,6 @@ public class PerfilVehiculoFragment extends Fragment {
     }
 
     //-------- FINAL DE EVENTO DE LISTVIEW CON MYSQL --------///
-
-
     //                     METODO ELIMINAR VEHICULO                      //
 
     private void eliminarVehiculo(){
@@ -296,3 +295,4 @@ public class PerfilVehiculoFragment extends Fragment {
     }
     //           FIN METODO ELIMINAR VEHICULO             //
 }
+

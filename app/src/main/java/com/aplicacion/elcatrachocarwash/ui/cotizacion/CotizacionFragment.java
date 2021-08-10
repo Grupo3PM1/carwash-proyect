@@ -442,7 +442,7 @@ public class CotizacionFragment extends Fragment implements View.OnClickListener
             DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                    txtfecha.setText(dayOfMonth+"-"+(monthOfYear+1)+"-"+year);
+                    txtfecha.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
                 }
             },anio,mes,dia);
             datePickerDialog.show();
